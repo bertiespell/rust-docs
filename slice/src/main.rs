@@ -8,6 +8,7 @@ fn main() {
     let search_word = String::from("Hello world");
     let found1 = refactored_first_words(&search_word);
     println!("Found1: {}", found1);
+    string_literal_example();
 }
 
 fn first_words(s: &String) -> usize { // returning usize on its own BUT...
@@ -52,4 +53,44 @@ fn slice_example() {
     // or you can drop both to take a slice of the entire string
     let entire_slice = &s[..];
     println!("Entire slice {}", entire_slice);
+}
+
+// Lesson: 
+// Slices are harder to mess up - the Rust compiler will help you spot bugs early because a slice is a reference, linked to the data below it. This means that Rust can tell you and throw errors if that data changes or is emptied out, but you're still tyring to use part of a slice.
+
+// example of something that a slice not protects against
+
+fn bad() {
+    let s = String::from("Hello");
+
+    let first_word = refactored_first_words(&s); // this is an immutable 
+
+    // s.clear(); // fails cannot borrow as mutable!!!
+}
+
+fn string_literal_example() {
+    let s = "hello"; // the type here is &str (it is a slice pointing to a specific point in the binary). This is also why string literals are immutable!
+    // &str is an immutable reference!
+
+    // you can take slices of literals and String values
+    // you can refactor AGAIN - so that you can use the method on both string literals AND string values
+    let proper_string = String::from("Hello again");
+
+    let found1 = re_refactored_first_word(&s);
+    let found2 = re_refactored_first_word(&proper_string); // Q: why don't I need to do &proper_string[..] to make it a SLICE rather than just a reference?
+
+    println!("Found {} and {}", found1, found2);
+}
+
+fn re_refactored_first_word(my_string: &str) -> &str {
+    let bytes = my_string.as_bytes();
+
+    for (i, &item) in bytes.iter().enumerate() {
+        if item == b' ' {
+            println!("ITEM: {}", item);
+            return &my_string[0..i];
+        }
+    }
+
+    &my_string[..]
 }
