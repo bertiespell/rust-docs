@@ -90,3 +90,11 @@ fn unit_like_structs() {
     // good in situations in which you want to define a trait on some type
     // but don't have any *data* to store in the type itself
 }
+
+// In the user example before - we used the String type and NOT a slice &str
+// This was deliberate
+// We want the struct to own all of its data AND for that data to be valid for as long as the entire struct is valid
+
+// It is possible for Structs to store references to data owned by something else - but this requires using lifetimes
+
+// Lifetimes ensure that the data in the struct is valid for the entire lifetime of the struct
