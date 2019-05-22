@@ -20,6 +20,8 @@ fn main() {
     print_struct(rec);
 
     test_impl();
+
+    test_squares();
 }
 
 fn area(width: u32, height: u32) -> u32 {
@@ -107,3 +109,19 @@ fn test_impl() {
 
 // p1.distance(&p2)
 // (&p1).distance(&p2)
+
+
+fn test_squares() {
+    let rect1 = Rectangle { width: 30, height: 50 };
+    let rect2 = Rectangle { width: 10, height: 40 };
+    let rect3 = Rectangle { width: 60, height: 45 };
+
+    println!("Can rect1 hold rect2? {}", rect1.can_hold(&rect2));
+    println!("Can rect1 hold rect3? {}", rect1.can_hold(&rect3));
+}
+
+impl Rectangle {
+    fn can_hold(&self, other_rec: &Rectangle) -> bool { // an immutable borrow!
+        self.width > other_rec.width && self.height > other_rec.height
+    }
+}
