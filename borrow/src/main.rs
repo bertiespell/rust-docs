@@ -40,3 +40,8 @@ fn test_change_str() {
     // println!("{}, {}, {}", z1, z2, z3); // This is not cool!
 
 }
+
+// RULES
+
+// 1. at any give time you can have EITHER only ONE mutable reference OR multiple immutable references
+// 2. references must be valid (i.e. you can't return a pointer of something that has gone out of scope)
