@@ -124,4 +124,26 @@ impl Rectangle {
     fn can_hold(&self, other_rec: &Rectangle) -> bool { // an immutable borrow!
         self.width > other_rec.width && self.height > other_rec.height
     }
+
+    // can also define functions which don't take self as a parameter
+    // these are called ASSOCIATED FUNCTIONS
+    // they are associated with the struct, but not methods as they don't take an instance of the struct to work with
+    // E.G String::from("Hello") THIS is an associated function
+    // Often used for constructors that will return a new instance of the struct
+
+    fn square(size: u32) -> Rectangle {
+        Rectangle {
+            width: size,
+            height: size,
+        }
+    }
+
+    // To call this associated function we use the :: syntax with the Rectangle struct
+}
+
+fn use_associated_fun() {
+    let square = Rectangle::square(30); // this function is NAMESPACED by the struct
+    // The :: Syntax
+    // Used for both Associated Functions
+    // Also used for namespacing (namespaces created by modules)
 }
