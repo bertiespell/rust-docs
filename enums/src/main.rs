@@ -68,3 +68,40 @@ enum ReRefactoredIpAddr {
 // You can put any type of data inside an enum
 
 // Even though there is a standard library definition we can use ours without conflict. Because we haven't brought the standard library one into scope
+
+enum Message {
+    Quit,
+    Move { x: i32, y: i32 }, // this contains an anonymous struct inside it
+    Write(String),
+    ChangeColour(i32, i32, i32),
+}
+
+// If you wanted to, you could write these as their own Structs
+
+struct QuitMessage; // unit struct
+struct MoveMessage {
+    x: i32,
+    y: i32,
+}
+struct WriteMessage(String); // tuple struct
+struct ChangeColorMessage(i32, i32, i32); // tuple struct
+
+pub struct MessageStruct {
+    Quit: QuitMessage,
+    Move: MoveMessage,
+    Write: WriteMessage,
+    ChangeColour: ChangeColorMessage,
+}
+
+// We can also make impls on enums!
+
+impl Message {
+    fn call(&self) {
+        // method body defined here
+    }
+}
+
+fn use_impl() {
+    let m = Message::Write(String::from("Write a little message"));
+    m.call();
+}
