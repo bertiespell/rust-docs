@@ -9,6 +9,7 @@ fn main() {
     let found1 = refactored_first_words(&search_word);
     println!("Found1: {}", found1);
     string_literal_example();
+    array_slice();
 }
 
 fn first_words(s: &String) -> usize { // returning usize on its own BUT...
@@ -93,4 +94,17 @@ fn re_refactored_first_word(my_string: &str) -> &str {
     }
 
     &my_string[..]
+}
+
+// OTHER TYPES OF SLICES
+// e.g. &[i32]
+
+// Remember: slices work by storing a reference to the first element, and then a length
+
+fn array_slice() {
+    let a = [6, 9, 3, 4, 5];
+    let little_slice = &a[..2]; // nifty!
+    for (item) in little_slice.iter() {
+        println!("My little slice {} {}", item, &item);
+    }
 }
