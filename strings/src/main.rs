@@ -61,4 +61,26 @@ fn main() {
     // easier to read!
     // doesn't take ownership of it's parameters!
     println!("{}", formatted_string);
+
+    // you can't index into a string!
+
+    // this is because of how Rust stores strings in memory!
+    // a string is a wrapper around a Vec<u8>
+    let len = String::from("hola").len();
+    println!("{}", len); // this is 4 - referring to 4 bytes
+    let len = String::from("Здравствуйте").len(); // this, however, is 24. Each character takes 2 bytes to encode - so indexing into ONE character would not give you an accurate reflection of the encoded value.
+
+    // to avoid these misunderstandings early - Rust does not allow you to index in in this way. Because one CHARACTER is not represented by one BYTE
+
+    // Rust char type is a Unicode Scalar Value
+    // grapheme clusters - closest thing to what we call letters
+
+    let hello = "Здравствуйте";
+
+    let s = &hello[0..4];   // this means that because each of these characters takes up 2 bytes - this would actually return Зд 
+
+    // this panics!!!! => thread 'main' panicked at 'byte index 1 is not a char boundary; it is inside 'З'
+    let s = &hello[0..1]; // because the character is two bytes!
+    // THE MORAL OF THE STORY
+    // You should use ranges to create string slices with caution, because doing so can crash your program.
 }
