@@ -31,6 +31,10 @@ mod sound {
         }
     }
 
+    pub mod other {
+
+    }
+
     mod voice { // all items are private by default
         pub fn breathe_in() {
 
@@ -48,12 +52,52 @@ mod sound {
 fn test() {
 
 }
+
+use crate::sound::instrument; // similar to making a symlink in filesystem (Here instrument is the name of the module we can use)
+
+// if you want to bring an item into scope and with RELATIVE PATH
+
+use self::sound::other; // here we use self
+use std::collections::HashMap;
+use std::fmt;
+use std::io; 
+
+// we can solve the problem that fmt and io both import result by using as
+
+use std::io::Result as IoResult;
+
+
 fn main() {
 
     // absolute 
     crate::sound::instrument::woodwind::clarinet();
     // relateive
     sound::instrument::woodwind::clarinet();
+
+    // now that they've been brought into scope above using use, we can actually just go :
+
+    instrument::woodwind::clarinet();  // For functions, it’s considered idiomatic to specify the function’s parent module with use, and then specify the parent module when calling the function.  (so at its shortest - this should always be at least woodwind::clarinet())
+
+    // For structs, enums, and other items, specifying the full path to the item with use is idiomatic. : 
+    let mut map = HashMap::new();
+    map.insert(1, 2);
+
+    // The exception to this idiom is if the use statements would bring two items with the same name into scope, which isn’t allowed.
+
+    // these two both are called result so we use namespacing
+    fn function1() -> fmt::Result {
+        unimplemented!();
+    }
+
+    // these two both are called result so we use namespacing
+    fn function2() -> io::Result<()> {
+        unimplemented!();
+    }
+
+    // uses as
+    fn function3() -> IoResult<()> {
+        unimplemented!();
+    }
 
     let mut v = plant::Vegetable::new("Squash");
 
@@ -65,6 +109,12 @@ fn main() {
 
     let order1 = plant::Appetizer::Salad;
     let order2 = plant::Appetizer::Soup;
+
+    // some of these ways of accessing modules are long and repetitive
+    // let's use use ;)
+    // this calls things into scope, and lets us use them as if they're local items
+
+    test_mod();
 }
 
 mod plant {
@@ -86,4 +136,74 @@ mod plant {
             }
         }
     }
+}
+
+// when you import things they are PRIVATE
+// you can use pub to RE-EXPORT things, so that calling code can use it
+
+mod sound2 {
+    pub mod instrument {
+        pub fn clarinet() {
+
+        }
+    }
+}
+
+mod performance_group {
+    pub use crate::sound2::instrument; // this let's use instrument from performance
+
+    pub fn trio() {
+        instrument::clarinet();
+        instrument::clarinet();
+        instrument::clarinet();
+    }
+}
+
+pub fn test2() {
+    performance_group::trio();
+    performance_group::instrument::clarinet();
+}
+
+// TO USE EXTERNAL PACKAGES
+// find what you want crates.io
+// add to toml file
+// then bring into scope using use!
+
+// Use nested paths to improve imports
+
+// instead of
+
+use std::cmp::Ordering;
+use std::marker;
+
+// we can do
+// use std::{cmp::Ordering, marker};
+
+// Can also deduplicate paths
+
+// use std::io;
+// use std::io::Write; // this one is a complete path of the last
+
+// instead do: 
+
+// use std::io::{self, Write};
+
+// bring everything in using glob operator!
+
+use std::collections::*;
+
+// You may want to organise code by moving modules into separate files
+
+// e.g. move the mod sound to /sound.rs
+
+mod another; // Using a semicolon after mod sound instead of a block tells Rust to load the contents of the module from another file with the same name as the module.
+
+fn test_mod() {
+    another::another2::test();
+    another::test2(); // the another module is specified and NAMED by the filename itself (so there for things IN it, don't have to be wrapped in a mod {})
+
+    // if they were to be wrapped we end up with line 202
+    // another::another2::test(); we have ANOTHER level of wrapping here
+    // extracting out into files is fine
+
 }
