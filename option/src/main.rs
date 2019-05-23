@@ -97,3 +97,38 @@ fn placeholder() {
         _ => (),
     }
 }
+
+// CONCISE Control Flow - With if let
+
+pub fn if_let_patter() {
+    let some_u8_value = Some(0u8);
+    match some_u8_value {
+        Some(3) => println!("three"),
+        _ => (),
+    }
+
+    // this is pretty long to write... instead we can do
+
+    if let Some(3) = some_u8_value {
+        println!("three"); 
+    }
+
+    // In other words, you can think of if let as syntax sugar for a match that runs code when the value matches one pattern and then ignores all other values.
+
+    // This pattern can also have an Else - which is the same as the _ => (), pattern that matches everything left over.
+
+    // so this... 
+    let mut count = 0;
+    match coin {
+        Coin::Quarter(state) => println!("State quarter from {:?}!", state),
+        _ => count += 1,
+    }
+
+    // can be rewritten as:
+    if let Coin::Quarter(state) = coin {
+        println!("State quarter from {:?}!", state);
+    } else {
+        count += 1;
+    }
+}
+
