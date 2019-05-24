@@ -1,0 +1,10 @@
+[package]
+name = "panic"
+version = "0.1.0"
+authors = ["Bertie <berniesnell@gmail.com>"]
+edition = "2018"
+
+[profile.release]
+panic = 'abort'
+
+[dependencies]
