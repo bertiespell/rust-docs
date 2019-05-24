@@ -50,5 +50,7 @@ fn main() {
 
     // Hashmap uses a cryptographically strong hashmap - resists DOS attacks - not fastest but better security
 
+    // use a different hasher busing the BuildHasher trait ;)
+
     println!("{:?}", map);
 }
