@@ -1,0 +1,62 @@
+Let's have a look at all the different structures and types we can come across in Rust
+
+let s = "My little string";
+let mut s = "My other little string";
+let s = String::from("Hello again, little world");
+let mut s = String::from("What's the difference?");
+
+// All these types will compile, but some of them have warnings - which gives us our first clue about what the difference between all these things is:
+
+warning: variable does not need to be mutable
+ --> src/main.rs:3:9
+  |
+3 |     let mut mutable_string_literal = "My other little string";
+  |         ----^^^^^^^^^^^^^^^^^^^^^^
+  |         |
+  |         help: remove this `mut`
+  |
+  = note: #[warn(unused_mut)] on by default
+
+warning: variable does not need to be mutable
+ --> src/main.rs:5:9
+  |
+5 |     let mut mutable_heap_string  = String::from("What's the difference?");
+  |         ----^^^^^^^^^^^^^^^^^^^
+  |         |
+  |         help: remove this `mut`
+
+We see that neither actually ever need a mutuable definition [check] and this is because unlike other initialised variables - they are always mutable by default.
+
+--str--
+
+* An immutable fixed length string somewhere in memory
+* Only has a length
+* A String slice - i.e. a view on some data
+    That data can be anywhere - in static storage (hardcoded into executable), inside a Heap allocated String, on the stack)
+    * Usually seen and interacted with as a &str
+
+--&str--
+
+* An immutable reference to a String
+* You cannot change it or manipulate it in any way
+* You can only ever interact with an str as a *borrowed type* i.e. an &str
+* Preferred way to pass strings around
+
+--String--
+
+* A growable heap allocated data structure
+* Maintains a length and a capacity
+
+--&String--
+
+* A reference to a String (a reference to something that is growable)
+* Also a borrowed type
+* A pointer
+* Pass around without giving up ownership
+* Can be coerced into &str  - this is to say that if you pass an &String to something expecting an &str it will not complain! COERCION
+
+Summary:
+
+Prefer &str as a function parameter or if you want a read-only view of a string; String when you want to own and mutate a string.
+
+This is identical to the relationship between a vector Vec<T> and a slice &[T], and is similar to the relationship between by-value T and by-reference &T for general types.

@@ -18,6 +18,8 @@ fn main() {
 
 // this can be refactored to use closures
 // more concise
+// doesn't use match
+// still cleans up errors
 
 fn refactored() {
     let f = File::open("hello.txt").unwrap_or_else(|error| {
