@@ -15,3 +15,28 @@ fn main() {
 
     // RUST KNOWS!!   .... because of the Borrow Checker ;)
 }
+
+// Borrow Checker
+// * Compares scopes to determine whether all borrows are valid
+// * Lifetimes are shorter and so program is rejected
+
+// generic lifetimes in functions
+
+// Let’s write a function that returns the longer of two string slices. This function will take two string slices and return a string slice.
+
+fn print_longest() {
+    let string1 = String::from("abcd");
+    let string2 = "xyz";
+
+    let result = longest(string1.as_str(), string2);
+    println!("The longest string is {}", result);
+}
+
+fn longest(x: &str, y: &str) -> &str {
+    if x.len() > y.len() {
+        return x
+    } else {
+        return y
+    }
+}
+
