@@ -54,3 +54,11 @@ fn lets_use_our_trait() {
 }
 
 //  Let’s say this lib.rs is for a crate we’ve called aggregator and someone else wants to use our crate’s functionality to implement the Summary trait on a struct defined within their library’s scope. They would need to bring the trait into their scope first. They would do so by specifying use aggregator::Summary;, which then would enable them to implement Summary for their type. The Summary trait would also need to be a public trait for another crate to implement it, which it is because we put the pub keyword before trait
+
+// trait OR type must be local (we can't implement external traits on external types)
+
+// This restriction is a property of programs called COHERENCE
+// more specifically the ORPHAN RULE (because the parent type is not present)
+
+
+// This rule ensures that other people’s code can’t break your code and vice versa. Without the rule, two crates could implement the same trait for the same type, and Rust wouldn’t know which implementation to use.
