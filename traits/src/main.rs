@@ -170,3 +170,22 @@ pub fn less_messy_bounds<T, U>(t: T, u: U) -> i32
         // ... 
         unimplemented!()
 }
+
+// returning types that implement traits..
+
+// we can also use the impl Trait syntax in the return position, to return a value of some type that implements a trait as shown here
+
+// it returns some type that implements the Summary trait, without naming the concrete type
+fn returns_summarise() -> impl Summary { // only used for a single type (i.e. this wouldn't work if it could return a NewsArticle - even though this also implements the same trait)
+    Tweet {
+        username: String::from("horse_ebooks"),
+        content: String::from("of course, as you probably already know, people"),
+        reply: false,
+        retweet: false,
+    }
+
+    // this is especially useful in the context of scope, closures and iterators
+    // Closures and iterators create types that only the compiler knows or types that are very long to specify
+}
+
+// The impl Trait syntax lets you concisely specify that a function returns some type that implements the Iterator trait without needing to write out a very long type.
