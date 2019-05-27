@@ -1,5 +1,6 @@
 fn main() {
     lets_use_our_trait();
+    lets_use_default_trait_impl();
 }
 
 // A trait - tells the Rust compiler about functionality a particular type has and can share with other types.
@@ -13,6 +14,11 @@ pub trait Summary {
     // NOTE: ends with a semicolon - not an implementation
 
     // Each type implementing this trait must provide its own custom behavior for the body of the method. The compiler will enforce that any type that has the Summary trait will have the method summarize defined with this signature exactly.
+
+    // we can also have default implementations
+    fn default_example(&self) -> String {
+        String::from("Read more...")
+    }
 }
 
 pub struct NewsArticle {
@@ -62,3 +68,14 @@ fn lets_use_our_trait() {
 
 
 // This rule ensures that other people’s code can’t break your code and vice versa. Without the rule, two crates could implement the same trait for the same type, and Rust wouldn’t know which implementation to use.
+
+fn lets_use_default_trait_impl() {
+    let article = NewsArticle {
+        headline: String::from("Headline here"),
+        content: String::from("test"),
+        location: String::from("somewhere"),
+        author: String::from("me"),
+    };
+
+    println!("Example summary: {}", article.default_example());
+}
