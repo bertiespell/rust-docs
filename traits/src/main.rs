@@ -135,3 +135,38 @@ pub fn notify_1<T: Summary>(item1: impl Summary, item2: impl Summary) { // these
 // this is TRAIT BOUNDS - they must be the same type
 pub fn notify_2<T: Summary>(item1: T, item2: T) {
 }
+
+// We can also specify more than one trait bound. Say we wanted notify to use display formatting on item as well as the summarize method: we specify in the notify definition that item must implement both Display and Summary. We can do so using the + syntax:
+
+use std::fmt::Display;
+
+pub fn notify_3(item: impl Summary + Display) {
+
+}
+
+// The + syntax is also valid with trait bounds on generic types:
+
+pub fn notify_4<T: Summary + Display>(item: T) {
+    // this uses trait bounds
+    // With the two trait bounds specified, the body of notify can call summarize and use {} to format item.
+}
+
+// Using too many trait bounds has its downsides. Each generic has its own trait bounds, so functions with multiple generic type parameters can contain lots of trait bound information between the function’s name and its parameter list, making the function signature hard to read. For this reason, Rust has alternate syntax for specifying trait bounds inside a where clause after the function signature. So instead of writing this:
+
+use std::fmt::Debug;
+
+pub fn messy_bounds<T: Display + Clone, U: Clone + Debug>(t: T, u: U) ->i32 {
+    //...
+    unimplemented!();
+}
+
+// instead we can use a WHERE clause
+
+pub fn less_messy_bounds<T, U>(t: T, u: U) -> i32
+    where   T: Display + Clone,
+            U: Clone + Debug
+    { // according to the docs this '{' is inline with pub,
+        // but that seems weird...
+        // ... 
+        unimplemented!()
+}
