@@ -49,6 +49,16 @@ fn largest<T: PartialOrd + Copy>(list: &[T]) -> T {
     largest
 }
 
+fn non_trait_largest<T: PartialOrd>(list: &[T]) -> &T {
+    let mut largest = &list[0]; 
+    for item in list.iter() {
+        if item > largest {
+            largest = &item;
+        }
+    }
+    &largest
+}
+
 // we can also use generic traits in struct definitions
 
 struct Point<T> {
