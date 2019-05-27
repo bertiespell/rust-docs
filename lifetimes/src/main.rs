@@ -82,3 +82,17 @@ fn example_lifetimes_2() {
         println!("The longest string is {}", result);
 }
 
+// instead, if you knew the first string was always going to be longer (which would make this whole exercise pointless - you could instead do this)
+
+fn longest_again<'a>(x: &'a str, y: &str) -> &'a str {
+    x
+}
+
+// When returning a reference from a function, the lifetime parameter for the return type needs to match the lifetime parameter for one of the parameters. If the reference returned does not refer to one of the parameters, it must refer to a value created within this function, which would be a dangling reference because the value will go out of scope at the end of the function.
+
+// Even though we’ve specified a lifetime parameter 'a for the return type, this implementation will fail to compile because the return value lifetime is not related to the lifetime of the parameters at all
+
+fn longest_3<'a>(x: &str, y: &str) -> &'a str {
+    let result = String::from("really long string");
+    result.as_str() // result does not live long enough
+}
