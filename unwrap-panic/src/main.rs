@@ -1,6 +1,7 @@
 use std::fs::File;
 use std::io;
 use std::io::Read;
+use std::fs;
 
 fn main() {
     // unwrap returns the result if it's there - othewise it panics
@@ -35,6 +36,8 @@ fn read_username_from_file() -> Result<String, io::Error> {
 
 // This pattern of propagating errors is so common in Rust that Rust provides the question mark operator ? to make this easier.
 
+// The ? at the end of the File::open call will return the value inside an Ok to the variable f. If an error occurs, the ? operator will return early out of the whole function and give any Err value to the calling code. The same thing applies to the ? at the end of the read_to_string call.
+
 fn refactored_read_username_from_file() -> Result<String, io::Error> {
     let mut f = File::open("hello.txt")?; // note the ?
     // works in the same way as match
@@ -53,3 +56,15 @@ fn refactored_read_username_from_file() -> Result<String, io::Error> {
 // When the ? operator calls the from function, the error type received is converted into the error type defined in the return type of the current function.
 
 // As long as each error type implements the from function to define how to convert itself to the returned error type, the ? operator takes care of the conversion automatically.
+
+fn re_refactored_read_username_from_file() -> Result<String, io::Error> {
+    let mut s = String::new();
+    File::open("hello.txt")?.read_to_string(&mut s)?; // chaining
+    Ok(s)
+}
+
+fn re_re_refactored_read_username_from_file() -> Result<String, io::Error> {
+    fs::read_to_string("hello.txt")
+}
+
+// The ? operator can only be used in functions that have a return type of Result, because it is defined to work in the same way as the match expression
