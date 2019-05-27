@@ -79,3 +79,59 @@ fn lets_use_default_trait_impl() {
 
     println!("Example summary: {}", article.default_example());
 }
+
+// the syntax for overriding a default implementation is the same as the syntax for implementing a trait method that doesn’t have a default implementation.
+
+// defaults can call other methods in the same trait
+
+// In this way, a trait can provide a lot of useful functionality and only require implementors to specify a small part of it.
+
+pub trait SharedDefaults {
+    fn summarise(&self) -> String; // this isn't implemented
+
+    fn uses_other_fn(&self) -> String {
+        format!("Oh we'll be here: {} ", self.summarise()) // yet we can still use it
+    }
+}
+
+// We can build up alot of functionality this way
+
+impl SharedDefaults for Tweet { // this compiles fine without needing to override other default
+    fn summarise(&self ) -> String {
+        format!("Example: {}", self.content)
+    }
+}
+
+fn see_how_we_can_use_it() {
+    let tweet = Tweet {
+        username: String::from("horse_ebooks"),
+        content: String::from("of course, as you probably already know, people"),
+        reply: false,
+        retweet: false,
+    };
+
+    println!("1 new tweet: {}", tweet.uses_other_fn()); // 
+}
+
+// trait bound syntax
+
+// the syntax above works in most contexts, but is syntactic sugar for this: 
+
+// equivalent but verbose
+pub fn notify<T: Summary>(item: T) {
+    println!("Breaking news: {}", item.summarize());
+}
+
+// more complex cases require this syntax
+
+// two parameteres that implement Summary
+
+// If we wanted this function to allow item1 and item2 to have different types, using impl Trait would be appropriate (as long as both types implement Summary). If we wanted to force both parameters to have the same type, that’s only possible to express using a trait bound, like this:
+
+pub fn notify_1<T: Summary>(item1: impl Summary, item2: impl Summary) { // these can have different types
+
+}
+
+// this is TRAIT BOUNDS - they must be the same type
+pub fn notify_2<T: Summary>(item1: T, item2: T) {
+}
