@@ -108,9 +108,14 @@ fn example_mixup() {
         y: 10.4,
     };
     let point2 = TwoTypePoint {
-        x: "hello",
-        y: 'n',
+        x: "hello", // string slice
+        y: 'n', // char
     };
     let p3 = point1.mixup(point2);
     println!("p3.x = {}, p3.y = {}", p3.x, p3.y);
 }
+
+// Good news: code with generics doesn't run any slower
+// It uses Monomorphization - i.e. it fills in concrete types at compile time
+// basically the reverse flow of refactoring the two generic types
+// The compiler recreates out the generic types
