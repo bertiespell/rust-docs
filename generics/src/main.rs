@@ -32,20 +32,22 @@ fn largest_char(list: &[char]) -> char {
 
 // both of these functions are the same! Other than the type - let's use generics!
 
-// fn largest<T>(list: &[T]) -> T {
-//     let mut largest = list[0];
-//     for &item in list.iter() {
-//         // But we get an error: binary operation `>` cannot be applied to type `T`
-//         // if item > largest {
-//             // In order to compare, the list has to be of a type that has the trait std::cmp::PartialOrd - which is a TRAIT
-//             // can only use values of a type that can be ordered.
+// If we don’t want to restrict the largest function to the types that implement the Copy trait, we could specify that T has the trait bound Clone instead of Copy. Then we could clone each value in the slice when we want the largest function to have ownership. Using the clone function means we’re potentially making more heap allocations in the case of types that own heap data like String, and heap allocations can be slow if we’re working with large amounts of data.
 
-//             // TBD: Define a generic type that has a particular trait
-//             largest = item;
-//         // }
-//     }
-//     largest
-// }
+fn largest<T: PartialOrd + Copy>(list: &[T]) -> T {
+    let mut largest = list[0]; // this needs to implement the copy trait, otherwise we're on a non-copy slice and can't move out
+    for &item in list.iter() {
+        // But we get an error: binary operation `>` cannot be applied to type `T`
+        if item > largest {
+            // In order to compare, the list has to be of a type that has the trait std::cmp::PartialOrd - which is a TRAIT
+            // can only use values of a type that can be ordered.
+
+            // TBD: Define a generic type that has a particular trait
+            largest = item;
+        }
+    }
+    largest
+}
 
 // we can also use generic traits in struct definitions
 
