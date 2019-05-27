@@ -68,3 +68,25 @@ fn re_re_refactored_read_username_from_file() -> Result<String, io::Error> {
 }
 
 // The ? operator can only be used in functions that have a return type of Result, because it is defined to work in the same way as the match expression
+
+// if you tried to use this in the main loop you'd get an error
+
+// This error points out that we’re only allowed to use the ? operator in a function that returns Result<T, E>.
+
+// WAYS TO FIX THIS
+
+// When you’re writing code in a function that doesn’t return Result<T, E>, and you want to use ? when you call other functions that return Result<T, E>, you have two choices to fix this problem. One technique is to change the return type of your function to be Result<T, E> if you have no restrictions preventing that. The other technique is to use a match or one of the Result<T, E> methods to handle the Result<T, E> in whatever way is appropriate.
+use std::error::Error;
+
+// these return types also work for main()
+
+fn like_main() -> Result<(), Box<dyn Error>> {
+    let f = File::open("hello.txt")?;
+
+    Ok(()) // this allows us to return a Result from main
+}
+
+// The Box<dyn Error> type is a trait object, 
+// Box<dyn Error> means... “any kind of error.” 
+// Using ? in a main function with this return type is allowed.
+
