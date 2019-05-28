@@ -84,3 +84,31 @@ mod tests_2 {
         );
     }
 }
+
+// can test things panic with - should_panic attribute
+
+pub struct Guess {
+    value: i32,
+}
+
+impl Guess {
+    pub fn new(value: i32) -> Guess {
+        if value < 1 || value > 100 {
+            panic!("Guess value should be between 1 and 100, got {}", value);
+        }
+        Guess {
+            value,
+        }
+    }
+}
+
+#[cfg(test)]
+mod tests_again {
+    use super::*;
+
+    #[test]
+    #[should_panic] // need this attribute to test that it panics!
+    fn greater_than_100() {
+        Guess::new(200);
+    }
+}
