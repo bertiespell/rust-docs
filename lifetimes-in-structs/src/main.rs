@@ -40,3 +40,16 @@ fn first_word_previously<'a>(s: &'a str) -> &'a str {
 // Lifetime elision rules
 
 // The elision rules don’t provide full inference. If Rust deterministically applies the rules but there is still ambiguity as to what lifetimes the references have, the compiler won’t guess what the lifetime of the remaining references should be. In this case, instead of guessing, the compiler will give you an error that you can resolve by adding the lifetime annotations that specify how the references relate to each other.
+
+// Lifetimes on function or method parameters are called input lifetimes, and lifetimes on return values are called output lifetimes.
+
+// The first rule is that each input lifetime (method or function parameter) that is a reference gets a lifetime specifier
+
+// The second rule is if there is exactly one input lifetime parameter, that lifetime is assigned to all output lifetime parameters: fn foo<'a>(x: &'a i32) -> &'a i32 (====> This is the reason why you don't always need to annotate lifetime types - when there is one parameter)
+
+// The third rule is if there are multiple input lifetime parameters, but one of them is &self or &mut self because this is a method, the lifetime of self is assigned to all output lifetime parameters. This third rule makes methods much nicer to read and write because fewer symbols are necessary.
+
+// LIFETIMES FOR STRUCTS and METHOD DEFINITIONS
+
+// Lifetime names for struct fields always need to be declared after the impl keyword and then used after the struct’s name, because those lifetimes are part of the struct’s type.
+
