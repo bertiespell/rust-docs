@@ -132,3 +132,17 @@ mod test_further_panic {
         Guess::new(200);
     }
 }
+
+// We can also write tests that use Result<T, E>
+
+#[cfg(test)]
+mod result_tests {
+    #[test]
+    fn it_works() -> Result<(), String> { // instead of using an assertion - we can return a Result, with either an Ok value, or an error
+        if 2 + 2 == 4 {
+            Ok(())
+        } else {
+            Err(String::from("two plus two does not equal four"))
+        }
+    }
+}
