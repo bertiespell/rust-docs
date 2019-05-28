@@ -18,9 +18,16 @@ mod tests {
         assert!(!smaller.can_hold(&larger));
     }
 
+    // assert_eq! and assert_ne!—to perform this test more conveniently. These macros compare two arguments for equality or inequality, respectively
+
     #[test]
     fn it_works() {
         assert_eq!(2 + 2, 4);
+    }
+
+    #[test]
+    fn it_adds_two() {
+        assert_eq!(4, add_two(2));
     }
 
     // We could also have non-test functions in the tests module to help set up common scenarios or perform common operations, so we need to indicate which functions are tests by using the #[test] attribute.
@@ -48,4 +55,8 @@ impl Rectangle {
     fn can_hold(&self, other: &Rectangle) -> bool {
         self.width > other.width && self.height > other.height
     }
+}
+
+pub fn add_two(a: i32) -> i32 {
+    a + 2
 }
