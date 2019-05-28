@@ -64,3 +64,23 @@ pub fn add_two(a: i32) -> i32 {
 // Under the surface, the assert_eq! and assert_ne! macros use the operators == and !=, respectively. When the assertions fail, these macros print their arguments using debug formatting, which means the values being compared must implement the PartialEq and Debug traits.
 
 // Because PartialEq and Debug are derivable, this is *usually* as simple as adding #[derive(PartialEq, Debug)] to your code (i.e. for structs and enums that you define (All primitive types nad most standard library types implement these))
+
+// Any arguments specified after the one required argument to assert! or the two required arguments to assert_eq! and assert_ne! are passed along to the format! macro ===> Use this for specific error messages
+
+pub fn greeting(name: &str) -> String {
+    format!("Hello")
+}
+
+#[cfg(test)]
+mod tests_2 {
+    use super::*;
+
+    #[test]
+    fn greeting_contains_name() {
+        let result = greeting("Carol");
+        assert!(
+            result.contains("Carol"),
+            "Greeting did not contain name, value was `{}`", result
+        );
+    }
+}
