@@ -77,3 +77,19 @@ fn example_lifetime() {
 // You should always consider whether you're variable lasts the entire length of the programme before using static
 
 // Mostly the problem on compilation is the result of a bug which could leave a dangling reference - solve that - rather than use static!
+
+// Generics, Lifetimes and Trait boundaries - all together now
+use std::fmt::Display;
+
+pub fn longest_string_with_announcement<'a, T>(x: &'a str, y: &'a str, ann: T) -> &'a str
+    where T: Display // trait bounds for T
+{
+    println!("Announcement: {}", ann);
+    if x.len() > y.len() {
+        println!("Longest string is x = {}", x);
+        x
+    } else {
+        println!("Longest string is y = {}", y);
+        y
+    }
+}
