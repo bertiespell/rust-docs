@@ -47,3 +47,22 @@ mod tests {
         assert_eq!(102, add_two(100));
     }
 }
+
+// running multiple (yet filtered) tests
+
+// We can specify part of a test name, and any test whose name matches that value will be run. For example, because two of our tests’ names contain add, we can run those two by running cargo test add
+
+// e.g. This would run the top two tests because they match
+// $ cargo test add
+
+// ignoring some tests unless specifically requested
+// you can instead annotate the time-consuming tests using the ignore attribute to exclude them, as shown here:
+
+#[test]
+#[ignore]
+fn expensive_test() {
+    // code that takes ages to run and our test suite can't be bothered to run it everytime
+}
+
+// if we only want to run ignored tests: 
+// $ cargo test -- --ignored
