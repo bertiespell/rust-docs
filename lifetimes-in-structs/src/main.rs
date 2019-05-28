@@ -65,3 +65,15 @@ impl<'a> ImportantExcerpt<'a> {
         self.part
     }
 }
+
+// The Static Lifetime - 'static
+
+// * Can live for the entire duration of the program
+// * All string literals have the 'static lifetime: 
+fn example_lifetime() {
+    let s: &'static str = "I am a little static string literal";
+}
+// this text is stored in the programmes binary - which is always available
+// You should always consider whether you're variable lasts the entire length of the programme before using static
+
+// Mostly the problem on compilation is the result of a bug which could leave a dangling reference - solve that - rather than use static!
