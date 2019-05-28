@@ -60,3 +60,7 @@ impl Rectangle {
 pub fn add_two(a: i32) -> i32 {
     a + 2
 }
+
+// Under the surface, the assert_eq! and assert_ne! macros use the operators == and !=, respectively. When the assertions fail, these macros print their arguments using debug formatting, which means the values being compared must implement the PartialEq and Debug traits.
+
+// Because PartialEq and Debug are derivable, this is *usually* as simple as adding #[derive(PartialEq, Debug)] to your code (i.e. for structs and enums that you define (All primitive types nad most standard library types implement these))
