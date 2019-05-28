@@ -53,3 +53,15 @@ fn first_word_previously<'a>(s: &'a str) -> &'a str {
 
 // Lifetime names for struct fields always need to be declared after the impl keyword and then used after the struct’s name, because those lifetimes are part of the struct’s type.
 
+impl<'a> ImportantExcerpt<'a> {
+    fn level(&self) -> i32 { // we're not required to annotate the lifetime of &self because of the third rule
+        3
+    }
+
+    fn announce_and_return(&self, announcement: &str) -> &str { // this again doesn't need annotation because of the third rule
+        // first rule gives &self and announcement lifetimes
+        // but because one of the arguments is &self, the return type gets the lifetime of &self (and all the lifetimes have been accounted for)
+        println!("Attention please: {}", announcement);
+        self.part
+    }
+}
