@@ -142,7 +142,10 @@ mod result_tests {
         if 2 + 2 == 4 {
             Ok(())
         } else {
+            // You can’t use the #[should_panic] annotation on tests that use Result<T, E>. Instead, you should return an Err value directly when the test should fail.
             Err(String::from("two plus two does not equal four"))
         }
     }
 }
+
+// Writing tests so they return a Result<T, E> enables you to use the question mark operator in the body of tests, which can be a convenient way to write tests that should fail if any operation within them returns an Err variant.
