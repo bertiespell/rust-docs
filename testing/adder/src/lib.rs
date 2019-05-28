@@ -123,7 +123,7 @@ mod tests_again {
 // Let's test more specific panic cases
 
 #[cfg(test)]
-mod tests {
+mod test_further_panic {
     use super::*;
 
     #[test]
