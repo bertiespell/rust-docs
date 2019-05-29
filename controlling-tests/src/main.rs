@@ -66,3 +66,38 @@ fn expensive_test() {
 
 // if we only want to run ignored tests: 
 // $ cargo test -- --ignored
+
+// UNIT TESTS
+// Small and more focused
+// Testing one module in isolation at a time
+// Can test private interfaces
+// Test each unit of code in isolation from the rest of your code
+// Live in the src directory, in each file with the code that it is testing
+// Convention is to create a module named 'tests' in each file to contain the test functions and to annotate the module with cfg(test)
+// #[cfg(test)] - tells Rust to only compile and run the code when you specifiy cargo test (i.e.) not cargo build
+// avoids it being in the compiled result
+// cfg = configuration, the OPTION is test cfg(test)
+
+// INTEGRATION TESTS
+// Entirely external to your library
+// Use your code in the same way any external module would (using only public API)
+// Potentially uses multiple modules per test
+// These go in a different directory
+// So they don't need the #[cfg(test)] annotation
+
+// testing private functions
+// Rust’s privacy rules do allow you to test private functions
+
+fn internal_adder(a: i32, b: i32) -> i32 {
+    a + b
+}
+
+#[cfg(test)]
+mod private_tests {
+    use super::*;
+
+    #[test]
+    fn internal() {
+        assert_eq!(4, internal_adder(2, 2));
+    }
+}
