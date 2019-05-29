@@ -101,3 +101,7 @@ mod private_tests {
         assert_eq!(4, internal_adder(2, 2));
     }
 }
+
+// Integration tests however use your code the way any external module would - these cannot access private methods
+
+// should live in a test directory
