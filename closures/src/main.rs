@@ -24,7 +24,7 @@ fn generate_workout(intensity: u32, random_number: u32) {
 
     // We can actually move the whole body of simulated_expensive_calculation within the closure we’re introducing here:
 
-    let expensive_closure = |num: i32| {
+    let expensive_closure = |num| {
         println!("calculating slowly...");
         thread::sleep(Duration::from_secs(2));
         num
@@ -33,11 +33,13 @@ fn generate_workout(intensity: u32, random_number: u32) {
     if intensity < 25 {
         println!(
             "Today, do {} pushups!",
-            simulated_expensive_calculation(intensity)
+            expensive_closure(intensity) // replaced the old (non-closure way) => simulated_expensive_calculation(intensity)
         );
         println!(
             "Next, do {} situps!",
-            simulated_expensive_calculation(intensity) // Low-intensity workout plans will recommend a number of push-ups and sit-ups based on the complex algorithm we’re simulating.
+            expensive_closure(intensity) // Low-intensity workout plans will recommend a number of push-ups and sit-ups based on the complex algorithm we’re simulating.
+
+            // we’re still calling the closure twice in the first if block, which will call the expensive code twice and make the user wait twice as long as they need to. We could fix this problem by creating a variable local to that if block to hold the result of calling the closure, but closures provide us with another solution.
         );
     } else {
         if random_number == 3 {
@@ -45,7 +47,7 @@ fn generate_workout(intensity: u32, random_number: u32) {
         } else {
             println!(
                 "Today, run for {} minutes!",
-                simulated_expensive_calculation(intensity)
+                expensive_closure(intensity)
             );
         }
     }
