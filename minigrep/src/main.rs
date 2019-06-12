@@ -8,6 +8,20 @@ use std::env; // it’s conventional to bring the parent module into scope rathe
 use std::fs;
 use std::io::prelude::*; // contains various useful traits for doing I/O, including file I/O.. In the same way that Rust has a general prelude that brings certain types and functions into scope automatically, the std::io module has its own prelude of common types and functions you’ll need when working with I/O. Unlike with the default prelude, we must explicitly add a use statement for the prelude from std::io.
 
+/**
+ * Split your program into a main.rs and a lib.rs and move your program’s logic to lib.rs.
+
+As long as your command line parsing logic is small, it can remain in main.rs.
+
+When the command line parsing logic starts getting complicated, extract it from main.rs and move it to lib.rs.
+
+The responsibilities that remain in the main function after this process should be limited to the following:
+
+Calling the command line parsing logic with the argument values
+Setting up any other configuration
+Calling a run function in lib.rs
+Handling the error if run returns an error
+ */
 fn main() {
     let args: Vec<String> = env::args().collect(); // the first value in the vector is "target/debug/minigrep", which is the name of our binary.. This matches the behavior of the arguments list in C
     let query = &args[1];
