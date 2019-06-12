@@ -22,14 +22,25 @@ Setting up any other configuration
 Calling a run function in lib.rs
 Handling the error if run returns an error
  */
+use std::process;
+
 fn main() {
-    let args: Vec<String> = env::args().collect(); // the first value in the vector is "target/debug/minigrep", which is the name of our binary.. This matches the behavior of the arguments list in C
-    let query = &args[1];
-    let filename = &args[2];
-    let contents = fs::read_to_string(filename)
+    let args: Vec<String> = env::args().collect(); // the first value in the vector is "target/debug/minigrep", which is the name of our binary.. This matches the behavior of the arguments list in C    
+
+    let config = Config::new(&args).unwrap_or_else(|err| {
+        println!("Problem parsing arguments: {}", err);
+        process::exit(1);
+    });
+
+    println!("Searching for {}", config.query);
+    println!("In file {}", config.filename);
+
+    run(config);
+}
+
+fn run(config: Config) {
+    let contents = fs::read_to_string(config.filename)
         .expect("Something went wrong reading the file");
-    
-    let config = parse_config(&args);
 
     println!("With text:\n{}", contents);
 }
@@ -39,9 +50,19 @@ struct Config {
     filename: String,
 }
 
-fn parse_config(args: &[String]) -> Config {
-    let query = args[1].clone();
-    let filename = args[2].clone(); // There’s a tendency among many Rustaceans to avoid using clone to fix ownership problems because of its runtime cost.
-    Config { query, filename }
+impl Config {
+    fn new(args: &[String]) -> Result<Config, &'static str> {
+        if args.len() < 3 {
+            return Err("not enough arguments");
+        }
+        let query = args[1].clone(); // There’s a tendency among many Rustaceans to avoid using clone to fix ownership problems because of its runtime cost.
+        let filename = args[2].clone();
+
+        Ok(Config { query, filename })
+    }
+}
+
+fn parse_config(args: &[String]) -> Result<Config, &'static str> {
+    Config::new(args)
     // (query, filename) // we could put the two values into one struct and give each of the struct fields a meaningful name. Doing so will make it easier for future maintainers of this code to understand how the different values relate to each other and what their purpose is.
 }
