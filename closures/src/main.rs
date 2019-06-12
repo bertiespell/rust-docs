@@ -20,6 +20,16 @@ fn generate_workout(intensity: u32, random_number: u32) {
     
     // TIME TO USE CLOSURE: We want to define code in one place in our program, but only execute that code where we actually need the result. This is a use case for closures!
 
+    // Instead of always calling the simulated_expensive_calculation function before the if blocks, we can define a closure and store the closure in a variable rather than storing the result of the function call
+
+    // We can actually move the whole body of simulated_expensive_calculation within the closure we’re introducing here:
+
+    let expensive_closure = |num: i32| {
+        println!("calculating slowly...");
+        thread::sleep(Duration::from_secs(2));
+        num
+    }; // Note that this let statement means expensive_closure contains the definition of an anonymous function, not the resulting value of calling the anonymous function. Recall that we’re using a closure because we want to define the code to call at one point, store that code, and call it at a later point; the code we want to call is now stored in expensive_closure.
+
     if intensity < 25 {
         println!(
             "Today, do {} pushups!",
