@@ -12,7 +12,14 @@ fn main() {
     );
 }
 
+// This code works the way the business wants it to now, but let’s say the data science team decides that we need to make some changes to the way we call the simulated_expensive_calculation function in the future. To simplify the update when those changes happen, we want to refactor this code so it calls the simulated_expensive_calculation function only once. We also want to cut the place where we’re currently unnecessarily calling the function twice without adding any other calls to that function in the process. That is, we don’t want to call it if the result isn’t needed, and we still want to call it only once.
+
 fn generate_workout(intensity: u32, random_number: u32) {
+    let expensive_result =
+        simulated_expensive_calculation(intensity); // This change unifies all the calls to simulated_expensive_calculation and solves the problem of the first if block unnecessarily calling the function twice. Unfortunately, we’re now calling this function and waiting for the result in all cases, which includes the inner if block that doesn’t use the result value at all.
+    
+    // TIME TO USE CLOSURE: We want to define code in one place in our program, but only execute that code where we actually need the result. This is a use case for closures!
+
     if intensity < 25 {
         println!(
             "Today, do {} pushups!",
