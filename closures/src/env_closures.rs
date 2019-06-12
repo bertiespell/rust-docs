@@ -20,4 +20,7 @@ FnMut => can change the environment because it mutably borrows values.
 
 Fn => borrows values from the environment immutably.
 
+The compiler can infer these :)
  */
+
+// If you want to force the closure to take ownership of the values it uses in the environment, you can use the move keyword before the parameter list. This technique is mostly useful when passing a closure to a new thread to move the data so it’s owned by the new thread.
