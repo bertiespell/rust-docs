@@ -6,7 +6,9 @@ use std::io::prelude::*; // contains various useful traits for doing I/O, includ
 pub fn run(config: Config) -> Result<(), Box<dyn Error>> { // Box<dyn Error> means the function will return a type that implements the Error trait, but we don’t have to specify what particular type the return value will be. This gives us flexibility to return error values that may be of different types in different error cases. This is what the dyn means, it's short for "dynamic."
     let contents = fs::read_to_string(config.filename)?;
 
-    println!("With text:\n{}", contents);
+    for line in search(&config.query, &contents) {
+        println!("{}", line);
+    }
     Ok(())
 }
 
@@ -33,7 +35,13 @@ pub fn parse_config(args: &[String]) -> Result<Config, &'static str> {
 }
 
 fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> { // Notice that we need an explicit lifetime 'a defined in the signature of search and used with the contents argument and the return value. Recall in Chapter 10 that the lifetime parameters specify which argument lifetime is connected to the lifetime of the return value. In this case, we indicate that the returned vector should contain string slices that reference slices of the argument contents (rather than the argument query).
-    vec![]
+    let mut results = Vec::new();
+    for line in contents.lines() {
+        if line.contains(query) {
+            results.push(line);
+        }
+    }
+    results
 }
 
 #[cfg(test)]
@@ -43,10 +51,7 @@ mod tests {
     #[test]
     fn one_result() {
         let query = "duct";
-        let contents = "\
-            Rust:
-            safe, fast, productive.
-            Pick three.";
+        let contents = "\nRust:\nsafe, fast, productive.\nPick three.";
 
         assert_eq!(
             vec!["safe, fast, productive."],
