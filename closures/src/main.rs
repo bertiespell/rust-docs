@@ -10,6 +10,24 @@ fn main() {
         simulated_user_specified_value,
         simulated_random_number
     );
+
+    // examples of how much code is needed for different function and closure definitions
+    fn  add_one_v1   (x: u32) -> u32 { x + 1 }
+    let add_one_v2 = |x: u32| -> u32 { x + 1 };
+    let add_one_v3 = |x|             { x + 1 };
+    let add_one_v4 = |x|               x + 1  ;
+    add_one_v3(1);
+    add_one_v4(2); // actually calling these means now the compiler can infer the type
+}
+
+// The Fn traits are provided by the standard library. 
+// All closures implement at least one of the traits: Fn, FnMut, or FnOnce
+
+struct Cacher<T> 
+    where T: Fn(u32) -> u32 // We add types to the Fn trait bound to represent the types of the parameters and return values the closures must have to match this trait bound.
+{
+    calculation: T, // holds a closure in T
+    value: Option<u32>, // the resulting (cached) calculation
 }
 
 // This code works the way the business wants it to now, but let’s say the data science team decides that we need to make some changes to the way we call the simulated_expensive_calculation function in the future. To simplify the update when those changes happen, we want to refactor this code so it calls the simulated_expensive_calculation function only once. We also want to cut the place where we’re currently unnecessarily calling the function twice without adding any other calls to that function in the process. That is, we don’t want to call it if the result isn’t needed, and we still want to call it only once.
@@ -24,7 +42,7 @@ fn generate_workout(intensity: u32, random_number: u32) {
 
     // We can actually move the whole body of simulated_expensive_calculation within the closure we’re introducing here:
 
-    let expensive_closure = |num| {
+    let expensive_closure = |num| { // type inferance => Closures don’t require you to annotate the types of the parameters or the return value like fn functions do. Type annotations are required on functions because they’re part of an explicit interface exposed to your users. Defining this interface rigidly is important for ensuring that everyone agrees on what types of values a function uses and returns. But closures aren’t used in an exposed interface like this: they’re stored in variables and used without naming them and exposing them to users of our library.
         println!("calculating slowly...");
         thread::sleep(Duration::from_secs(2));
         num
@@ -40,6 +58,8 @@ fn generate_workout(intensity: u32, random_number: u32) {
             expensive_closure(intensity) // Low-intensity workout plans will recommend a number of push-ups and sit-ups based on the complex algorithm we’re simulating.
 
             // we’re still calling the closure twice in the first if block, which will call the expensive code twice and make the user wait twice as long as they need to. We could fix this problem by creating a variable local to that if block to hold the result of calling the closure, but closures provide us with another solution.
+
+            // SOLUTION =>  We can create a struct that will hold the closure and the resulting value of calling the closure. The struct will execute the closure only if we need the resulting value, and it will cache the resulting value so the rest of our code doesn’t have to be responsible for saving and reusing the result. You may know this pattern as memoization or lazy evaluation.
         );
     } else {
         if random_number == 3 {
