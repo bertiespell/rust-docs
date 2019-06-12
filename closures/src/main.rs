@@ -23,25 +23,25 @@ fn main() {
 // The Fn traits are provided by the standard library. 
 // All closures implement at least one of the traits: Fn, FnMut, or FnOnce
 
-struct Cacher<T> 
-    where T: Fn(u32) -> u32 // We add types to the Fn trait bound to represent the types of the parameters and return values the closures must have to match this trait bound.
+struct Cacher<T, U> 
+    where T: Fn(u32) -> U // We add types to the Fn trait bound to represent the types of the parameters and return values the closures must have to match this trait bound.
 {
     calculation: T, // holds a closure in T
-    value: Option<u32>, // the resulting (cached) calculation
+    value: Option<U>, // the resulting (cached) calculation
     // Before we execute the closure, value will be None
 }
 
-impl<T> Cacher<T> 
-    where T: Fn(u32) -> u32
+impl<T, U: Copy> Cacher<T, U> 
+    where T: Fn(u32) -> U
 {
-    fn new(calculation: T) -> Cacher<T> {
+    fn new(calculation: T) -> Cacher<T, U> {
         Cacher {
             calculation,
             value: None
         }
     }
 
-    fn value(&mut self, arg: u32) -> u32 { // We want Cacher to manage the struct fields’ values rather than letting the calling code potentially change the values in these fields directly, so these fields are private.
+    fn value(&mut self, arg: u32) -> U { // We want Cacher to manage the struct fields’ values rather than letting the calling code potentially change the values in these fields directly, so these fields are private.
         match self.value {
             Some(v) => v,
             None => {
@@ -52,6 +52,11 @@ impl<T> Cacher<T>
         }
     }
 }
+
+// One problem with the cacher - and potential task
+/**
+ * Try modifying Cacher to hold a hash map rather than a single value. The keys of the hash map will be the arg values that are passed in, and the values of the hash map will be the result of calling the closure on that key. Instead of looking at whether self.value directly has a Some or a None value, the value function will look up the arg in the hash map and return the value if it’s present. If it’s not present, the Cacher will call the closure and save the resulting value in the hash map associated with its arg value.
+ */
 
 /**
  When code using a Cacher asks for the result of the closure, the Cacher will execute the closure at that time and store the result within a Some variant in the value field. 
