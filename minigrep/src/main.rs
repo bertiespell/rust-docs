@@ -23,6 +23,7 @@ Calling a run function in lib.rs
 Handling the error if run returns an error
  */
 use std::process;
+use std::error::Error;
 
 fn main() {
     let args: Vec<String> = env::args().collect(); // the first value in the vector is "target/debug/minigrep", which is the name of our binary.. This matches the behavior of the arguments list in C    
@@ -38,11 +39,11 @@ fn main() {
     run(config);
 }
 
-fn run(config: Config) {
-    let contents = fs::read_to_string(config.filename)
-        .expect("Something went wrong reading the file");
+fn run(config: Config) -> Result<(), Box<dyn Error>> { // Box<dyn Error> means the function will return a type that implements the Error trait, but we don’t have to specify what particular type the return value will be. This gives us flexibility to return error values that may be of different types in different error cases. This is what the dyn means, it's short for "dynamic."
+    let contents = fs::read_to_string(config.filename)?;
 
     println!("With text:\n{}", contents);
+    Ok(())
 }
 
 struct Config {
