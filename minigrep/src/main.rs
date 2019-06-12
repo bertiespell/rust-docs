@@ -9,7 +9,7 @@ use std::fs;
 use std::io::prelude::*; // contains various useful traits for doing I/O, including file I/O.. In the same way that Rust has a general prelude that brings certain types and functions into scope automatically, the std::io module has its own prelude of common types and functions you’ll need when working with I/O. Unlike with the default prelude, we must explicitly add a use statement for the prelude from std::io.
 
 /**
- * Split your program into a main.rs and a lib.rs and move your program’s logic to lib.rs.
+Split your program into a main.rs and a lib.rs and move your program’s logic to lib.rs.
 
 As long as your command line parsing logic is small, it can remain in main.rs.
 
@@ -28,6 +28,14 @@ fn main() {
     let filename = &args[2];
     let contents = fs::read_to_string(filename)
         .expect("Something went wrong reading the file");
+    
+    let (query, filename) = parse_config(&args);
 
     println!("With text:\n{}", contents);
+}
+
+fn parse_config(args: &[String]) -> (&str, &str) {
+    let query = &args[1];
+    let filename = &args[2];
+    (query, filename) // we could put the two values into one struct and give each of the struct fields a meaningful name. Doing so will make it easier for future maintainers of this code to understand how the different values relate to each other and what their purpose is.
 }
