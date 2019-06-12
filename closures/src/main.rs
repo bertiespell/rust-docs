@@ -22,26 +22,29 @@ fn main() {
 
 // The Fn traits are provided by the standard library. 
 // All closures implement at least one of the traits: Fn, FnMut, or FnOnce
+use std::marker::PhantomData;
 
-struct Cacher<T, U> 
-    where T: Fn(u32) -> U // We add types to the Fn trait bound to represent the types of the parameters and return values the closures must have to match this trait bound.
+struct Cacher<T, U, V> 
+    where T: Fn(V) -> U // We add types to the Fn trait bound to represent the types of the parameters and return values the closures must have to match this trait bound.
 {
     calculation: T, // holds a closure in T
     value: Option<U>, // the resulting (cached) calculation
     // Before we execute the closure, value will be None
+    phantom: PhantomData<V>
 }
 
-impl<T, U: Copy> Cacher<T, U> 
-    where T: Fn(u32) -> U
+impl<T, U: Copy, V> Cacher<T, U, V> 
+    where T: Fn(V) -> U
 {
-    fn new(calculation: T) -> Cacher<T, U> {
+    fn new(calculation: T) -> Cacher<T, U, V> {
         Cacher {
             calculation,
-            value: None
+            value: None,
+            phantom: PhantomData,
         }
     }
 
-    fn value(&mut self, arg: u32) -> U { // We want Cacher to manage the struct fields’ values rather than letting the calling code potentially change the values in these fields directly, so these fields are private.
+    fn value(&mut self, arg: V) -> U { // We want Cacher to manage the struct fields’ values rather than letting the calling code potentially change the values in these fields directly, so these fields are private.
         match self.value {
             Some(v) => v,
             None => {
