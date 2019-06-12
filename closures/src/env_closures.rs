@@ -12,6 +12,18 @@ fn main() {
     assert!(equal_to_x(y));
 }
 
+fn example_of_capturing_closures() {
+    let x = vec![1, 2, 3];
+
+    let equal_to_x = move |z| z == x;
+
+    // println!("can't use x here: {:?}", x); We can't use x here!
+
+    let y = vec![1, 2, 3];
+
+    assert!(equal_to_x(y));
+}
+
 /** TYPES of closure
 
 FnOnce => consumes the variables it captures from its enclosing scope, known as the closure’s environment. To consume the captured variables, the closure must take ownership of these variables and move them into the closure when it is defined. The Once part of the name represents the fact that the closure can’t take ownership of the same variables more than once, so it can be called only once.
