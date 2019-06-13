@@ -32,6 +32,12 @@ Safety: If the function is unsafe to call (we discuss unsafety in Chapter 19), t
 
 // NICE! ====> running cargo test will run the code examples in your documentation as tests! Nothing is better than documentation with examples. But nothing is worse than examples that don’t work because the code has changed since the documentation was written. 
 
+//  //!, adds documentation to the item that contains the comments rather than adding documentation to the items following the comments.
+
+// Libraries and reexporting to useful, higher level places => You might want to organize your structs in a hierarchy containing multiple levels, but then people who want to use a type you’ve defined deep in the hierarchy might have trouble finding out that type exists. They might also be annoyed at having to enter use my_crate::some_module::another_module::UsefulType; rather than use my_crate::UsefulType;.
+
+// you can re-export items to make a public structure that’s different from your private structure by using pub use. Re-exporting takes a public item in one location and makes it public in another location, as if it were defined in the other location instead.
+
 /// Runs the function
 /// 
 /// # Examples
