@@ -32,3 +32,35 @@ impl Drop for CustomSmartPointer {
 
 // Rust doesn’t let us call drop explicitly because Rust would still automatically call drop on the value at the end of main. This would be a double free error because Rust would be trying to clean up the same value twice.
 
+// ==== Graph Structures
+// Ownership is less clear and may require reference counting
+
+/*
+In the majority of cases, ownership is clear: you know exactly which variable owns a given value. However, there are cases when a single value might have multiple owners. For example, in graph data structures, multiple edges might point to the same node, and that node is conceptually owned by all of the edges that point to it. A node shouldn’t be cleaned up unless it doesn’t have any edges pointing to it.
+
+To enable multiple ownership, Rust has a type called Rc<T>, which is an abbreviation for reference counting.
+
+The Rc<T> type keeps track of the number of references to a value which determines whether or not a value is still in use. If there are zero references to a value, the value can be cleaned up without any references becoming invalid.
+ */
+
+// We use the Rc<T> type when we want to allocate some data on the heap for multiple parts of our program to read and we can’t determine at compile time which part will finish using the data last. If we knew which part would finish last, we could just make that part the data’s owner, and the normal ownership rules enforced at compile time would take effect.
+
+// Rc<T> is only for use in single-threaded scenarios
+
+// Let's create two lists that both share ownership of a third list
+
+// We’ll create list a that contains 5 and then 10. Then we’ll make two more lists: b that starts with 3 and c that starts with 4. Both b and c lists will then continue on to the first a list containing 5 and 10. In other words, both lists will share the first list containing 5 and 10.
+use List::{Cons, Nil};
+
+fn reference_counting() {
+     let a = Cons(5,
+        Box::new(Cons(10,
+            Box::new(Nil))));
+    let b = Cons(3, Box::new(a));
+    // let c = Cons(4, Box::new(a)); // This isn't allowed - because of borrowing rules - only one thing allowed to take ownership
+}
+
+enum List {
+    Cons(i32, Box<List>),
+    Nil
+}
