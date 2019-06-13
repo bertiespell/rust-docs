@@ -21,7 +21,22 @@ Handling the error if run returns an error
 extern crate minigrep;
 use std::process;
 use std::env; // it’s conventional to bring the parent module into scope rather than the function
-use minigrep::Config;
+
+// EXAMPLE of making this public at the top level (rather than inside mingrep)
+pub use minigrep::Config;
+
+/**
+ * ========== PUBLISHING ===========
+ * 
+ * 1) Make sure config is set (API token needed from crates.io)
+ * 2) Make sure TOML file is accurate (must contain license) see docs: https://doc.rust-lang.org/1.29.0/book/2018-edition/ch14-02-publishing-to-crates-io.html#exporting-a-convenient-public-api-with-pub-use
+ * 3) cargo publish
+ * 
+ * ========== VERSIONING ===========
+ * 
+ * Once a package is published it can't be deleted! (ensures consistency of builds)
+ * Just change the version value (follow sem-ver) and republish
+ */
 
 fn main() {
     // let args: Vec<String> = env::args().collect(); // the first value in the vector is "target/debug/minigrep", which is the name of our binary.. This matches the behavior of the arguments list in C    
