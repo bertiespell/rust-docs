@@ -50,6 +50,8 @@ pub use minigrep::Config;
  * A yank does not delete any code. For example, the yank feature is not intended for deleting accidentally uploaded secrets. If that happens, you must reset those secrets immediately.
  */
 
+// WORKSPACES => Only have top level lock file. Declare workspaces in top level TOML. Making all crates in the workspace use the same dependencies means the crates in the workspace will always be compatible with each other. 
+
 fn main() {
     // let args: Vec<String> = env::args().collect(); // the first value in the vector is "target/debug/minigrep", which is the name of our binary.. This matches the behavior of the arguments list in C    
 
