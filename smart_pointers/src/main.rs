@@ -12,5 +12,6 @@
  * 3) When you want to own a value and you only care that it's a type that implements a specific trait (rather than being of a specific type) (trait object)
  */
 fn main() {
-    println!("Hello, world!");
+    let b = Box::new(5); // Just like any owned value, when a box goes out of scope, as b does at the end of main, it will be deallocated.
+    println!("b = {}", b);
 }
