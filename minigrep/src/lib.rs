@@ -34,12 +34,24 @@ pub struct Config {
 }
 
 impl Config {
-    pub fn new(args: &[String]) -> Result<Config, &'static str> {
-        if args.len() < 3 {
-            return Err("not enough arguments");
-        }
-        let query = args[1].clone(); // There’s a tendency among many Rustaceans to avoid using clone to fix ownership problems because of its runtime cost.
-        let filename = args[2].clone();
+    // With our new knowledge about iterators, we can change the new function to take ownership of an iterator as its argument instead of borrowing a slice. We’ll use the iterator functionality instead of the code that checks the length of the slice and indexes into specific locations. This will clarify what the Config::new function is doing because the iterator will access the values.
+
+    // Once Config::new takes ownership of the iterator and stops using indexing operations that borrow, we can move the String values from the iterator into Config rather than calling clone and making a new allocation.
+    pub fn new(mut args: std::env::Args) -> Result<Config, &'static str> {
+        args.next();
+
+        let query = match args.next() {
+            Some(query) => query,
+            None => return Err("Didn't get a query string")
+        };
+
+        let filename = match args.next() {
+            Some(filename) => filename,
+            None => return Err("Didn't get a filename")
+        };
+
+        // let query = args[1].clone(); // There’s a tendency among many Rustaceans to avoid using clone to fix ownership problems because of its runtime cost. - this is why the pattern matching on an iterator above is better!
+        // let filename = args[2].clone();
 
         let case_sensitive = env::var("CASE_INSENSITIVE").is_err();
 
@@ -47,7 +59,7 @@ impl Config {
     }
 }
 
-pub fn parse_config(args: &[String]) -> Result<Config, &'static str> {
+pub fn parse_config(args: std::env::Args) -> Result<Config, &'static str> {
     Config::new(args)
     // (query, filename) // we could put the two values into one struct and give each of the struct fields a meaningful name. Doing so will make it easier for future maintainers of this code to understand how the different values relate to each other and what their purpose is.
 }
