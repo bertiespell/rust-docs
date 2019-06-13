@@ -78,3 +78,12 @@ enum ReferenceCountList {
 }
 
 use ReferenceCountList::{Cons as RcCons, Nil as RcNil};
+
+fn use_reference_count_list() {
+    let a = Rc::new(RcCons(5, Rc::new(RcCons(10, Rc::new(RcNil)))));
+    let b = RcCons(3, Rc::clone(&a));
+    let c = RcCons(4, Rc::clone(&a)); // this now doesn't complain - it just ups the reference count!
+
+    // ======== NOTATION ========
+    // We could have called a.clone() rather than Rc::clone(&a), but Rust’s convention is to use Rc::clone in this case. The implementation of Rc::clone doesn’t make a deep copy of all the data like most types’ implementations of clone do. The call to Rc::clone only increments the reference count, which doesn’t take much time. Deep copies of data can take a lot of time. By using Rc::clone for reference counting, we can visually distinguish between the deep-copy kinds of clones and the kinds of clones that increase the reference count. When looking for performance problems in the code, we only need to consider the deep-copy clones and can disregard calls to Rc::clone.
+}
