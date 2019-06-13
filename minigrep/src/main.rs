@@ -36,6 +36,18 @@ pub use minigrep::Config;
  * 
  * Once a package is published it can't be deleted! (ensures consistency of builds)
  * Just change the version value (follow sem-ver) and republish
+ * 
+ * =========== YANKING =============
+ * 
+ * Although you can’t remove previous versions of a crate, you can prevent any future projects from adding them as a new dependency. This is useful when a crate version is broken for one reason or another. In such situations, Cargo supports yanking a crate version.
+ * 
+ * $ cargo yank --vers 1.0.1
+ * 
+ * Oops didn't mean to do that
+ * 
+ * $ cargo yank --vers 1.0.1 --undo 
+ * 
+ * A yank does not delete any code. For example, the yank feature is not intended for deleting accidentally uploaded secrets. If that happens, you must reset those secrets immediately.
  */
 
 fn main() {
