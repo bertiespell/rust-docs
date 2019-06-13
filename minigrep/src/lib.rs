@@ -20,6 +20,18 @@ use std::io::prelude::*; // contains various useful traits for doing I/O, includ
 
 // Documentation comments use three slashes, ///, instead of two and support Markdown notation for formatting the text.
 
+// As well as #Examples, we also often see :
+
+/**
+
+Panics: The scenarios in which the function being documented could panic. Callers of the function who don’t want their programs to panic should make sure they don’t call the function in these situations.
+Errors: If the function returns a Result, describing the kinds of errors that might occur and what conditions might cause those errors to be returned can be helpful to callers so they can write code to handle the different kinds of errors in different ways.
+Safety: If the function is unsafe to call (we discuss unsafety in Chapter 19), there should be a section explaining why the function is unsafe and covering the invariants that the function expects callers to uphold.
+
+ */
+
+// NICE! ====> running cargo test will run the code examples in your documentation as tests! Nothing is better than documentation with examples. But nothing is worse than examples that don’t work because the code has changed since the documentation was written. 
+
 /// Runs the function
 /// 
 /// # Examples
