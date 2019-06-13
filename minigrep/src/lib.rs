@@ -12,6 +12,8 @@ use std::io::prelude::*; // contains various useful traits for doing I/O, includ
 
 // this will put error messages in the file - which is likely not what we want. This is because we are currently sending error messages to stdout
 
+// ITERATORS => are one of Rust’s zero-cost abstractions, by which we mean using the abstraction imposes no additional runtime overhead.
+
 pub fn run(config: Config) -> Result<(), Box<dyn Error>> { // Box<dyn Error> means the function will return a type that implements the Error trait, but we don’t have to specify what particular type the return value will be. This gives us flexibility to return error values that may be of different types in different error cases. This is what the dyn means, it's short for "dynamic."
     let contents = fs::read_to_string(config.filename)?;
 
@@ -21,9 +23,13 @@ pub fn run(config: Config) -> Result<(), Box<dyn Error>> { // Box<dyn Error> mea
         search_case_insensitive(&config.query, &contents)
     };
 
-    for line in results {
-        println!("{}", line);
-    }
+    results
+        .iter()
+        .for_each(|line| println!("{}", line)); // ==== Refactor again :) ====
+
+    // for line in results {
+    //     println!("{}", line);
+    // }
     Ok(())
 }
 
