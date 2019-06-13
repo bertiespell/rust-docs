@@ -57,10 +57,24 @@ fn reference_counting() {
         Box::new(Cons(10,
             Box::new(Nil))));
     let b = Cons(3, Box::new(a));
-    // let c = Cons(4, Box::new(a)); // This isn't allowed - because of borrowing rules - only one thing allowed to take ownership
+    // let c = Cons(4, Box::new(a)); // This isn't allowed - because of borrowing rules - only one thing allowed to take ownership - a already moved into b - so it can't be moved into c
 }
 
 enum List {
     Cons(i32, Box<List>),
     Nil
 }
+
+// we’ll change our definition of List to use Rc<T> in place of Box<T>
+
+// Each Cons variant will now hold a value and an Rc<T> pointing to a List. When we create b, instead of taking ownership of a, we’ll clone the Rc<List> that a is holding, thereby increasing the number of references from one to two and letting a and b share ownership of the data in that Rc<List>
+
+// We’ll also clone a when creating c, increasing the number of references from two to three. Every time we call Rc::clone, the reference count to the data within the Rc<List> will increase, and the data won’t be cleaned up unless there are zero references to it.
+use std::rc::Rc;
+
+enum ReferenceCountList {
+    Cons(i32, Rc<ReferenceCountList>),
+    Nil
+}
+
+use ReferenceCountList::{Cons as RcCons, Nil as RcNil};
