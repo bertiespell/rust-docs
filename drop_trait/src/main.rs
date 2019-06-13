@@ -99,5 +99,7 @@ fn actually_count_references() {
         let c = RcCons(4, Rc::clone(&a));
         println!("count after creating c = {}", Rc::strong_count(&a));
     }
-    println!("count after c goes out of scope = {}", Rc::strong_count(&a));
+    println!("count after c goes out of scope = {}", Rc::strong_count(&a)); // we don't have to call a function to decrease the reference count... the implementation of the Drop trait decreases the reference count automatically when an Rc<T> value goes out of scope.
 }
+
+// Using Rc<T> allows a single value to have multiple owners, and the count ensures that the value remains valid as long as any of the owners still exist.
