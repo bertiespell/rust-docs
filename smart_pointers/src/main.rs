@@ -11,6 +11,8 @@
  * 
  * 3) When you want to own a value and you only care that it's a type that implements a specific trait (rather than being of a specific type) (trait object)
  */
+
+use List::{Cons, Nil};
 fn main() {
     let b = Box::new(5); // Just like any owned value, when a box goes out of scope, as b does at the end of main, it will be deallocated.  The deallocation happens for the box (stored on the stack) and the data it points to (stored on the heap).
 
@@ -18,4 +20,20 @@ fn main() {
 
 
     println!("b = {}", b);
+
+    let list = Cons(1, 
+        Box::new(Cons(2, 
+            Box::new(Cons(3, 
+                Box::new(Nil))))));
+
+    // Boxes provide only the indirection and heap allocation; they don’t have any other special capabilities, like those we’ll see with the other smart pointer types. They also don’t have any performance overhead that these special capabilities incur, so they can be useful in cases like the cons list where the indirection is the only feature we need.
+
+    // ==== DEREF trait and Smart Pointers ===
+
+    // The Box<T> type is a smart pointer because it implements the Deref trait, which allows Box<T> values to be treated like references. When a Box<T> value goes out of scope, the heap data that the box is pointing to is cleaned up as well because of the Drop trait implementation.
+}
+
+enum List {
+    Cons(i32, Box<List>),
+    Nil
 }
