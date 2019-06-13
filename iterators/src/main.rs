@@ -50,6 +50,8 @@ impl Iterator for Counter {
     }
 }
 
+// For example, if for some reason we wanted to take the values produced by an instance of Counter, pair them with values produced by another Counter instance after skipping the first value, multiply each pair together, keep only those results that are divisible by 3, and add all the resulting values together, we could do so
+
 #[test]
 fn calling_next_directly() {
     let mut counter = Counter::new();
