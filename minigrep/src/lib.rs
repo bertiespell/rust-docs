@@ -14,6 +14,8 @@ use std::io::prelude::*; // contains various useful traits for doing I/O, includ
 
 // ITERATORS => are one of Rust’s zero-cost abstractions, by which we mean using the abstraction imposes no additional runtime overhead.
 
+// Unrolling is an optimization that removes the overhead of the loop controlling code and instead generates repetitive code for each iteration of the loop.
+
 pub fn run(config: Config) -> Result<(), Box<dyn Error>> { // Box<dyn Error> means the function will return a type that implements the Error trait, but we don’t have to specify what particular type the return value will be. This gives us flexibility to return error values that may be of different types in different error cases. This is what the dyn means, it's short for "dynamic."
     let contents = fs::read_to_string(config.filename)?;
 
