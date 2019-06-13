@@ -31,7 +31,7 @@ fn main() {
     // if we didn't have derefencing
 
     let m = MyBox::new(String::from("Rust"));
-    hello(&(*m)[..]);
+    hello(&(*m)[..]); // This derefences m, creates a reference to the dereferenced value and converts to str (slice)
 }
 
 fn hello(name: &str) { // &Mybox<String> becomes &String => DEREFERENCING
@@ -55,3 +55,5 @@ impl<T> Deref for MyBox<T> {
         &self.0 // We fill in the body of the deref method with &self.0 so deref returns a reference to the value we want to access with the * operator.
     }
 }
+
+// Similar to how you use the Deref trait to override the * operator on immutable references, you can use the DerefMut trait to override the * operator on mutable references
