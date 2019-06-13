@@ -65,13 +65,18 @@ pub fn parse_config(args: std::env::Args) -> Result<Config, &'static str> {
 }
 
 fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> { // Notice that we need an explicit lifetime 'a defined in the signature of search and used with the contents argument and the return value. Recall in Chapter 10 that the lifetime parameters specify which argument lifetime is connected to the lifetime of the return value. In this case, we indicate that the returned vector should contain string slices that reference slices of the argument contents (rather than the argument query).
-    let mut results = Vec::new();
-    for line in contents.lines() {
-        if line.contains(query) {
-            results.push(line);
-        }
-    }
-    results
+    // let mut results = Vec::new(); // We can write this code in a more concise way using iterator adaptor methods. Doing so also lets us avoid having a mutable intermediate results vector. => The functional programming style prefers to minimize the amount of mutable state to make code clearer. 
+    // for line in contents.lines() {
+    //     if line.contains(query) {
+    //         results.push(line);
+    //     }
+    // }
+    // results
+
+    contents // cool!
+        .lines()
+        .filter(|line| line.contains(query))
+        .collect()
 }
 
 fn search_case_insensitive<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
