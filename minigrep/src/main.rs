@@ -52,6 +52,12 @@ pub use minigrep::Config;
 
 // WORKSPACES => Only have top level lock file. Declare workspaces in top level TOML. Making all crates in the workspace use the same dependencies means the crates in the workspace will always be compatible with each other. 
 
+/**
+ * ======= BINARIES VS LIBRARIES ========
+ * 
+ * The cargo install command allows you to install and use binary crates locally. This isn’t intended to replace system packages; it’s meant to be a convenient way for Rust developers to install tools that others have shared on crates.io. Note that you can only install packages that have binary targets. A binary target is the runnable program that is created if the crate has a src/main.rs file or another file specified as a binary, as opposed to a library target that isn’t runnable on its own but is suitable for including within other programs. Usually, crates have information in the README file about whether a crate is a library, has a binary target, or both.
+ */
+
 fn main() {
     // let args: Vec<String> = env::args().collect(); // the first value in the vector is "target/debug/minigrep", which is the name of our binary.. This matches the behavior of the arguments list in C    
 
