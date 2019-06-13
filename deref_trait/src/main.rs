@@ -22,6 +22,20 @@ fn main() {
     let y = MyBox::new(x);
     println!("{}", x);
     println!("{}", *y);
+
+    // Deref coercion happens automatically when we pass a reference to a particular type’s value as an argument to a function or method that doesn’t match the parameter type in the function or method definition.
+
+    let m = MyBox::new(String::from("Rust"));
+    hello(&m); // Rust calls deref again to turn the &String into &str, to match hello function definition
+
+    // if we didn't have derefencing
+
+    let m = MyBox::new(String::from("Rust"));
+    hello(&(*m)[..]);
+}
+
+fn hello(name: &str) { // &Mybox<String> becomes &String => DEREFERENCING
+    println!("Hello, {}!", name); // // dereferencing happening here
 }
 
 // Let's build our own smart pointer
