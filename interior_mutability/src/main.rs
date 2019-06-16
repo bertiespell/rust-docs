@@ -36,6 +36,14 @@ fn main() {
 
 // However, there are situations in which it would be useful for a value to mutate itself in its methods but appear immutable to other code. Code outside the value’s methods would not be able to mutate the value. 
 
+//  Using RefCell<T> is one way to get the ability to have interior mutability. But RefCell<T> doesn’t get around the borrowing rules completely: the borrow checker in the compiler allows this interior mutability, and the borrowing rules are checked at runtime instead. If you violate the rules, you’ll get a panic! instead of a compiler error.
+
+// i.e. PROGRAM CAN STILL PANIC if the borrowing rules aren't followed
+
+// A test double is the general programming concept for a type used in place of another type during testing. Mock objects are specific types of test doubles that record what happens during a test so you can assert that the correct actions took place.
+
+// MOCK and TEST doubles
+
 fn main() {
     println!("Hello, world!");
 }
