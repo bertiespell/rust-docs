@@ -23,6 +23,19 @@ Box<T> allows immutable or mutable borrows checked at compile time; Rc<T> allows
 Because RefCell<T> allows mutable borrows checked at runtime, you can mutate the value inside the RefCell<T> even when the RefCell<T> is immutable.
  */
 
+// Mutating the value inside an immutable value is the interior mutability pattern. Let’s look at a situation in which interior mutability is useful and examine how it’s possible.
+
+/**
+A consequence of the borrowing rules is that when you have an immutable value, you can’t borrow it mutably. For example, this code won’t compile:
+
+fn main() {
+    let x = 5;
+    let y = &mut x;
+}
+ */
+
+// However, there are situations in which it would be useful for a value to mutate itself in its methods but appear immutable to other code. Code outside the value’s methods would not be able to mutate the value. 
+
 fn main() {
     println!("Hello, world!");
 }
