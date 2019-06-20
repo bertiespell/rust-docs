@@ -24,7 +24,7 @@ fn main() {
 
     // Uncomment the next line to see that we have a cycle;
     // it will overflow the stack
-    // println!("a next item = {:?}", a.tail());
+    // println!("a next item = {:?}", a.tail()); // tail can now never reach nil
 }
 
 #[derive(Debug)]
