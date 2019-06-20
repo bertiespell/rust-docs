@@ -50,7 +50,9 @@ fn main() {
         }
     });
 
-    for received in rx {
+    for received in rx { // In the main thread, we’re not calling the recv function explicitly anymore: instead, we’re treating rx as an iterator. For each value received, we’re printing it. When the channel is closed, iteration will end.
         println!("Got: {}", received);
     }
+
+    // Because we don’t have any code that pauses or delays in the for loop in the main thread, we can tell that the main thread is waiting to receive values from the spawned thread.
 }
