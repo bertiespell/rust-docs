@@ -30,5 +30,7 @@ fn main() {
         children: RefCell::new(vec![Rc::clone(&leaf)]), //We clone the Rc<Node> in leaf and store that in branch, meaning the Node in leaf now has two owners: leaf and branch. We can get from branch to leaf through branch.children, but there’s no way to get from leaf to branch. The reason is that leaf has no reference to branch and doesn’t know they’re related. We want leaf to know that branch is its parent. We’ll do that next.
         parent: RefCell::new(Weak::new())
     });
-    *leaf.parent.borrow_mut() = Rc::downgrade(&leaf);
+    *leaf.parent.borrow_mut() = Rc::downgrade(&branch); // creates a weak pointer to the branch
+
+    println!("leaf parent = {:?}", leaf.parent.borrow().upgrade()); // this now creates a strong reference (that will fall out of scope at the end of main - for us to read value)
 }
