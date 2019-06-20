@@ -1,7 +1,7 @@
 use std::sync::mpsc; //  multiple producer, single consumer.
 use std::thread;
 
-fn main() {
+fn main1() {
     let (tx, rx) = mpsc::channel();
     thread::spawn(move || {
         let val = String::from("hi");
@@ -14,4 +14,43 @@ fn main() {
      * The try_recv method doesn’t block, but will instead return a Result<T, E> immediately: an Ok value holding a message if one is available and an Err value if there aren’t any messages this time. Using try_recv is useful if this thread has other work to do while waiting for messages: we could write a loop that calls try_recv every so often, handles a message if one is available, and otherwise does other work for a little while until checking again.
      */
     println!("Got: {}", received);
+}
+
+// An example of how ownership rules prevent unsafe code - uncommented this wouldn't compile
+
+fn main2() {
+    let (tx, rx) = mpsc::channel();
+
+    thread::spawn(move || {
+        let val = String::from("hi");
+        tx.send(val).unwrap();
+        // println!("val is {}", val); // trying to use val after we've sent it down the channel - won't compile!
+    });
+
+    let received = rx.recv().unwrap();
+    println!("Got: {}", received);
+}
+
+use std::time::Duration;
+
+fn main() {
+    let (tx, rx) = mpsc::channel();
+
+    thread::spawn(move || {
+        let vals = vec![
+            String::from("hi"),
+            String::from("from"),
+            String::from("the"),
+            String::from("thread"),
+        ];
+
+        for val in vals {
+            tx.send(val).unwrap();
+            thread::sleep(Duration::from_secs(1));
+        }
+    });
+
+    for received in rx {
+        println!("Got: {}", received);
+    }
 }
