@@ -65,7 +65,7 @@ mod tests {
         let mut limit_tracker = LimitTracker::new(&mock_messenger, 100);
 
         limit_tracker.set_value(80);
-        // here we can just borrow
+        // here we can just borrow (gives us immutable reference to the vector)
         assert_eq!(mock_messenger.sent_messages.borrow().len(), 1);
     }
 }
