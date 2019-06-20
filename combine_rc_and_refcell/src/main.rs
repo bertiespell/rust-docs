@@ -1,16 +1,13 @@
-fn main() {
-    println!("Hello, world!");
-}
+
+use List::{Cons, Nil};
+use std::rc::Rc;
+use std::cell::RefCell;
 
 #[derive(Debug)]
 enum List {
     Cons(Rc<RefCell<i32>>, Rc<List>),
     Nil,
 }
-
-use List::{Cons, Nil};
-use std::rc::Rc;
-use std::cell::RefCell;
 
 fn main() {
     // ------- EXAMPLE -------
