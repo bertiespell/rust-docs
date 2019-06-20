@@ -40,20 +40,22 @@ fn main() {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::cell::RefCell;
 
     struct MockMessenger {
-        sent_messages: Vec<String>,
+        sent_messages: RefCell<Vec<String>>, // this becomes a RefCell!
     }
 
     impl MockMessenger {
         fn new() -> MockMessenger {
-            MockMessenger { sent_messages: vec![] }
+            MockMessenger { sent_messages: RefCell::new(vec![]) } // instantiate it here!
         }
     }
 
     impl Messenger for MockMessenger {
         fn send(&self, message: &str) {
-            self.sent_messages.push(String::from(message));
+            // instead here we have to borrow mutably
+            self.sent_messages.borrow_mut().push(String::from(message)); // this errors out because self is not mutable. We can't make self mutable, because then the signature from send would not match the signature required from the trait - this is a case for refcell and interior mutability!
         }
     }
 
@@ -63,7 +65,7 @@ mod tests {
         let mut limit_tracker = LimitTracker::new(&mock_messenger, 100);
 
         limit_tracker.set_value(80);
-
-        assert_eq!(mock_messenger.sent_messages.len(), 1);
+        // here we can just borrow
+        assert_eq!(mock_messenger.sent_messages.borrow().len(), 1);
     }
 }
