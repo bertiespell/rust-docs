@@ -6,7 +6,7 @@ pub trait Draw {
     fn draw(&self);
 }
 
-pub struct Screen {
+pub struct Screen { // On the other hand, with the method using trait objects, one Screen instance can hold a Vec that contains a Box<Button> as well as a Box<TextField>. 
     pub components: Vec<Box<dyn Draw>>, // NOTE: the dyn keyword - this is a trait object
 }
 
