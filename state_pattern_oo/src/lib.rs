@@ -30,21 +30,33 @@ impl Post {
     }
 
     pub fn request_review(&mut self) {
-        if let Some(s) = self.state.take() { //To consume the old state, the request_review method needs to take ownership of the state value. This is where the Option in the state field of Post comes in: we call the take method to take the Some value out of the state field and leave a None in its place, because Rust doesn’t let us have unpopulated fields in structs. This lets us move the state value out of Post rather than borrowing it. 
+        if let Some(s) = self.state.take() { //To consume the old state, the request_review method needs to take ownership of the state value. This is where the Option in the state field of Post comes in: we call the take method to take the Some value out of the state field and leave a None in its place, because Rust doesn’t let us have unpopulated fields in structs. This lets us move the state value out of Post rather than borrowing it... We need to set state to None temporarily rather than setting it directly with code like self.state = self.state.request_review(); to get ownership of the state value. This ensures Post can’t use the old state value after we’ve transformed it into a new state.
             self.state = Some(s.request_review())
+        }
+    }
+
+    pub fn approve(&mut self) {
+        if let Some(s) = self.state.take() {
+            self.state = Some(s.approve())
         }
     }
 }
 
 trait State {
     fn request_review(self: Box<Self>) -> Box<dyn State>; // Note that rather than having self, &self, or &mut self as the first parameter of the method, we have self: Box<Self>. This syntax means the method is only valid when called on a Box holding the type. This syntax takes ownership of Box<Self>, invalidating the old state so the state value of the Post can transform into a new state.
+
+    fn approve(self: Box<Self>) -> Box<dyn State>;
 }
 
 struct Draft {}
 
 impl State for Draft {
     fn request_review(self: Box<Self>) -> Box<dyn State> {
-        Box::new(PendingReview)
+        Box::new(PendingReview {}) // The request_review method on Draft needs to return a new, boxed instance of a new PendingReview struct, which represents the state when a post is waiting for a review.
+    }
+
+    fn approve(self: Box<Self>) -> Box<dyn State> {
+        self
     }
 }
 
@@ -52,6 +64,22 @@ struct PendingReview {}
 
 impl State for PendingReview {
     fn request_review(self: Box<Self>) -> Box<dyn State> {
+        self // The PendingReview struct also implements the request_review method but doesn’t do any transformations. Rather, it returns itself, because when we request a review on a post already in the PendingReview state, it should stay in the PendingReview state.
+    }
+
+    fn approve(self: Box<Self>) -> Box<dyn State> {
+        Box::new(Published {})
+    }
+}
+
+struct Published {}
+
+impl State for Published {
+    fn request_review(self: Box<Self>) -> Box<dyn State> {
+        self
+    }
+
+    fn approve(self: Box<Self>) -> Box<dyn State> {
         self
     }
 }
