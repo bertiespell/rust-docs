@@ -26,7 +26,7 @@ impl Post {
     // Even after we’ve called add_text and added some content to our post, we still want the content method to return an empty string slice because the post is still in the draft state
 
     pub fn content(&self) -> &str {
-        self.state.as_ref().unwrap().content(&self) // Because the goal is to keep all these rules inside the structs that implement State, we call a content method on the value in state and pass the post instance (that is, self) as an argument. Then we return the value that is returned from using the content method on the state value.
+        self.state.as_ref().unwrap().content(&self) // Because the goal is to keep all these rules inside the structs that implement State, we call a content method on the value in state and pass the post instance (that is, self) as an argument. Then we return the value that is returned from using the content method on the state value... We call the as_ref method on the Option because we want a reference to the value inside the Option rather than ownership of the value. Because state is an Option<Box<dyn State>>, when we call as_ref, an Option<&Box<dyn State>> is returned. If we didn’t call as_ref, we would get an error because we can’t move state out of the borrowed &self of the function parameter.
     }
 
     pub fn request_review(&mut self) {
