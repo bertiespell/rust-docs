@@ -22,6 +22,12 @@ impl Post {
     pub fn add_text(&mut self, text: &str) {
         self.content.push_str(text);
     }
+
+    // Even after we’ve called add_text and added some content to our post, we still want the content method to return an empty string slice because the post is still in the draft state
+
+    pub fn content(&self) -> &str {
+        ""
+    }
 }
 
 trait State {}
