@@ -18,6 +18,10 @@ impl Post {
             content: String::new(),
         }
     }
+
+    pub fn add_text(&mut self, text: &str) {
+        self.content.push_str(text);
+    }
 }
 
 trait State {}
