@@ -131,4 +131,10 @@ impl DraftPost {
         self.content.push_str(text);
     }
 }
+
+// Both the Post and DraftPost structs have a private content field that stores the blog post text. The structs no longer have the state field because we’re moving the encoding of the state to the types of the structs. The Post struct will represent a published post, and it has a content method that returns the content.
+
+We still have a Post::new function, but instead of returning an instance of Post, it returns an instance of DraftPost. Because content is private and there aren’t any functions that return Post, it’s not possible to create an instance of Post right now.
+
+The DraftPost struct has an add_text method, so we can add text to content as before, but note that DraftPost does not have a content method defined! So now the program ensures all posts start as draft posts, and draft posts don’t have their content available for display. Any attempt to get around these constraints will result in a compiler error.
  */
