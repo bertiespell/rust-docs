@@ -46,6 +46,10 @@ trait State {
     fn request_review(self: Box<Self>) -> Box<dyn State>; // Note that rather than having self, &self, or &mut self as the first parameter of the method, we have self: Box<Self>. This syntax means the method is only valid when called on a Box holding the type. This syntax takes ownership of Box<Self>, invalidating the old state so the state value of the Post can transform into a new state.
 
     fn approve(self: Box<Self>) -> Box<dyn State>;
+
+    fn content<'a>(&self, post: &'a Post) -> &'a str {
+        ""
+    }
 }
 
 struct Draft {}
@@ -81,5 +85,9 @@ impl State for Published {
 
     fn approve(self: Box<Self>) -> Box<dyn State> {
         self
+    }
+
+    fn content<'a>(&self, post: &'a Post) -> &'a str {
+        &post.content
     }
 }
