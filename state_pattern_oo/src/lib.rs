@@ -11,6 +11,7 @@ pub struct Post {
     content: String,
 }
 
+// The logic related to the rules lives in the state objects rather than being scattered throughout Post.
 impl Post {
     pub fn new() -> Post {
         Post {
@@ -88,7 +89,7 @@ impl State for Published {
     }
 
     // The Published struct will override the content method and return the value in post.content.
-    fn content<'a>(&self, post: &'a Post) -> &'a str {
+    fn content<'a>(&self, post: &'a Post) -> &'a str { // Note that we need lifetime annotations on this method. We’re taking a reference to a post as an argument and returning a reference to part of that post, so the lifetime of the returned reference is related to the lifetime of the post argument.
         &post.content
     }
 }
