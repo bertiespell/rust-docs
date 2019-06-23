@@ -47,7 +47,7 @@ trait State {
 
     fn approve(self: Box<Self>) -> Box<dyn State>;
 
-    fn content<'a>(&self, post: &'a Post) -> &'a str {
+    fn content<'a>(&self, post: &'a Post) -> &'a str { // We add a default implementation for the content method that returns an empty string slice. That means we don’t need to implement content on the Draft and PendingReview structs. 
         ""
     }
 }
