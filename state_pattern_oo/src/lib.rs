@@ -99,11 +99,26 @@ impl State for Published {
 
 By implementing the state pattern exactly as it’s defined for object-oriented languages, we’re not taking as full advantage of Rust’s strengths as we could. Let’s look at some changes we can make to the blog crate that can make invalid states and transitions into compile time errors.
 
+But we also have to make some small changes to main. The request_review and approve methods return new instances rather than modifying the struct they’re called on, so we need to add more let post = shadowing assignments to save the returned instances. We also can’t have the assertions about the draft and pending review post’s contents be empty strings, nor do we need them: we can’t compile code that tries to use the content of posts in those states any longer.
+
 fn main() {
+
+    // REFACTOR (REMOVE)
+    // let mut post = Post::new();
+
+    // post.add_text("I ate a salad for lunch today");
+    assert_eq!("", post.content()); // Instead of having this be valid - we could instead just have different types - and the compiler would alert us to the fact that this was still a draft
+    
+    // REFACTOR (ADD)
     let mut post = Post::new();
 
     post.add_text("I ate a salad for lunch today");
-    assert_eq!("", post.content()); // Instead of having this be valid - we could instead just have different types - and the compiler would alert us to the fact that this was still a draft
+
+    let post = post.request_review();
+
+    let post = post.approve();
+
+    assert_eq!("I ate a salad for lunch today", post.content());
 }
 
 pub struct Post {
@@ -155,5 +170,7 @@ We still have a Post::new function, but instead of returning an instance of Post
 
 The DraftPost struct has an add_text method, so we can add text to content as before, but note that DraftPost does not have a content method defined! So now the program ensures all posts start as draft posts, and draft posts don’t have their content available for display. Any attempt to get around these constraints will result in a compiler error.
 
-// So how do we get a published post? We want to enforce the rule that a draft post has to be reviewed and approved before it can be published. A post in the pending review state should still not display any content. Let’s implement these constraints by adding another struct, PendingReviewPost, defining the request_review method on DraftPost to return a PendingReviewPost, and defining an approve method on PendingReviewPost to return a Post, 
+// So how do we get a published post? We want to enforce the rule that a draft post has to be reviewed and approved before it can be published. A post in the pending review state should still not display any content. Let’s implement these constraints by adding another struct, PendingReviewPost, defining the request_review method on DraftPost to return a PendingReviewPost, and defining an approve method on PendingReviewPost to return a Post.
+
+// The request_review and approve methods take ownership of self, thus consuming the DraftPost and PendingReviewPost instances and transforming them into a PendingReviewPost and a published Post, respectively. This way, we won’t have any lingering DraftPost instances after we’ve called request_review on them, and so forth. The PendingReviewPost struct doesn’t have a content method defined on it, so attempting to read its content results in a compiler error, as with DraftPost. Because the only way to get a published Post instance that does have a content method defined is to call the approve method on a PendingReviewPost, and the only way to get a PendingReviewPost is to call the request_review method on a DraftPost, we’ve now encoded the blog post workflow into the type system.
  */
