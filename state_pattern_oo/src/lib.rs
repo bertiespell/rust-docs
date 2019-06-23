@@ -101,6 +101,8 @@ By implementing the state pattern exactly as it’s defined for object-oriented 
 
 But we also have to make some small changes to main. The request_review and approve methods return new instances rather than modifying the struct they’re called on, so we need to add more let post = shadowing assignments to save the returned instances. We also can’t have the assertions about the draft and pending review post’s contents be empty strings, nor do we need them: we can’t compile code that tries to use the content of posts in those states any longer.
 
+The changes we needed to make to main to reassign post mean that this implementation doesn’t quite follow the object-oriented state pattern anymore: the transformations between the states are no longer encapsulated entirely within the Post implementation. However, our gain is that invalid states are now impossible because of the type system and the type checking that happens at compile time! This ensures that certain bugs, such as display of the content of an unpublished post, will be discovered before they make it to production.
+
 fn main() {
 
     // REFACTOR (REMOVE)
