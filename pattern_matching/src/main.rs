@@ -10,6 +10,16 @@ These components describe the shape of the data we’re working with, which we t
 
 To use a pattern, we compare it to some value. If the pattern matches the value, we use the value parts in our code
 
+
+e.g.
+
+match VALUE {
+    PATTERN => EXPRESSION,
+    PATTERN => EXPRESSION,
+    PATTERN => EXPRESSION,
+}
+
+match must be exhaustive
  */
 fn main() {
     println!("Hello, world!");
