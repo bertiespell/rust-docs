@@ -63,4 +63,9 @@ fn main() {
     for (index, value) in v.iter().enumerate() {
         println!("{} is at index {}", value, index);
     }
+
+    // even a simple let expression
+    let x = 5;
+    // let PATTERN = EXPRESSION;
+
 }
