@@ -70,5 +70,6 @@ fn main() {
 
     // this works with destructing
     let (x, y, z) = (1, 2, 3);
-
+    // can also ignore some
+    let (a, b, _) = (4, 5, 6);
 }
