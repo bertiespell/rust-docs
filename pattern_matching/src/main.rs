@@ -19,7 +19,9 @@ match VALUE {
     PATTERN => EXPRESSION,
 }
 
-match must be exhaustive
+match must be exhaustive...
+
+A particular pattern _ will match anything, but it never binds to a variable, so it’s often used in the last match arm. The _ pattern can be useful when you want to ignore any value not specified, for example. 
  */
 fn main() {
     println!("Hello, world!");
