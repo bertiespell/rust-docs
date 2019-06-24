@@ -73,3 +73,13 @@ fn main() {
     // can also ignore some
     let (a, b, _) = (4, 5, 6);
 }
+
+fn print_coordinates(&(x, y): &(i32, i32)) {
+    println!("Current location: ({}, {})", x, y);
+}
+
+// Can also pattern match here
+fn function_parameters_too() {
+    let point = (3, 5);
+    print_coordinates(&point);
+}
