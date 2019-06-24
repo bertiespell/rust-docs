@@ -68,4 +68,7 @@ fn main() {
     let x = 5;
     // let PATTERN = EXPRESSION;
 
+    // this works with destructing
+    let (x, y, z) = (1, 2, 3);
+
 }
