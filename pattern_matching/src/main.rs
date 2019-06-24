@@ -37,12 +37,23 @@ fn main() {
     } else if is_tuesday {
         println!("Tuesday is green day!");
     } else if let Ok(age) = age {
-        if age > 30 {
+        if age > 30 { // You can see that if let can also introduce shadowed variables in the same way that match arms can: the line if let Ok(age) = age introduces a new shadowed age variable that contains the value inside the Ok variant. This means we need to place the if age > 30 condition within that block: we can’t combine these two conditions into if let Ok(age) = age && age > 30. The shadowed age we want to compare to 30 isn’t valid until the new scope starts with the curly bracket.
             println!("Using purple as the background color");
         } else {
             println!("Using orange as the background color");
         }
     } else {
         println!("Using blue as the background color");
+    }
+
+    // the while let conditional loop allows a while loop to run for as long as a pattern continues to match.
+    let mut stack = Vec::new();
+
+    stack.push(1);
+    stack.push(2);
+    stack.push(3);
+
+    while let Some(top) = stack.pop() {
+        println!("{}", top);
     }
 }
