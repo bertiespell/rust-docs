@@ -22,7 +22,27 @@ match VALUE {
 match must be exhaustive...
 
 A particular pattern _ will match anything, but it never binds to a variable, so it’s often used in the last match arm. The _ pattern can be useful when you want to ignore any value not specified, for example. 
+
+if let expressions are a shorter way to write the equivalent of a match that only matches one case. Optionally, if let can have a corresponding else containing code to run if the pattern in the if let doesn’t match.
+
+
  */
 fn main() {
-    println!("Hello, world!");
+    let favorite_color: Option<&str> = None;
+    let is_tuesday = false;
+    let age: Result<u8, _> = "34".parse();
+
+    if let Some(color) = favorite_color {
+        println!("Using your favorite color, {}, as the background", color);
+    } else if is_tuesday {
+        println!("Tuesday is green day!");
+    } else if let Ok(age) = age {
+        if age > 30 {
+            println!("Using purple as the background color");
+        } else {
+            println!("Using orange as the background color");
+        }
+    } else {
+        println!("Using blue as the background color");
+    }
 }
