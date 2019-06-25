@@ -248,3 +248,20 @@ fn prefixed_names_are_different() {
 
     // println!("{:?}", s); ERROR => We’ll receive an error because the s value will still be moved into _s, which prevents us from using s again.
 }
+
+// Ignore parts of a value with ..
+
+struct Point {
+    x: i32,
+    y: i32,
+    z: i32,
+}
+
+fn ignore_parts() {
+
+    let origin = Point { x: 0, y: 0, z: 0 };
+
+    match origin {
+        Point { x, .. } => println!("x is {}", x),
+    }
+}
