@@ -320,3 +320,15 @@ fn solve_shadow_var_problem() {
 
     println!("at the end: x = {:?}, y = {:?}", x, y);
 }
+
+// You can also use the or operator | in a match guard to specify multiple patterns; the match guard condition will apply to all the patterns
+
+fn combine_with_or() {
+    let x = 4;
+    let y = false;
+
+    match x {
+        4 | 5 | 6 if y => println!("yes"),
+        _ => println!("no"),
+    }
+}
