@@ -3,6 +3,7 @@ fn main() {
     multiple_patterns();
     match_range();
     destructuring();
+    use_literal_destructuring();
 }
 
 fn match_against_literals() {
@@ -81,4 +82,14 @@ fn shorthand_destructuing_with_matching_var_names() {
     let Point { x, y } = p; // shorter - but the same
     assert_eq!(0, x);
     assert_eq!(7, y);
+}
+
+fn use_literal_destructuring() {
+    let p = Point { x: 0, y: 7 };
+
+    match p {
+        Point { x, y: 0 } => println!("On the x axis at {}", x),
+        Point { x: 0, y } => println!("On the y axis at {}", y),
+        Point { x, y } => println!("On neither axis: ({}, {})", x, y),
+    }
 }
