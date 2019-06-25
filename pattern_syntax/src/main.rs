@@ -312,7 +312,9 @@ fn solve_shadow_var_problem() {
 
     match x {
         Some(50) => println!("Got 50"),
-        Some(n) if n == y => println!("Matched, n = {:?}", n),
+        Some(n) if n == y => println!("Matched, n = {:?}", n),  // This code will now print Default case, x = Some(5). The pattern in the second match arm doesn’t introduce a new variable y that would shadow the outer y, meaning we can use the outer y in the match guard. Instead of specifying the pattern as Some(y), which would have shadowed the outer y, we specify Some(n). This creates a new variable n that doesn’t shadow anything because there is no n variable outside the match.
+
+        // The match guard if n == y is not a pattern and therefore doesn’t introduce new variables. This y is the outer y rather than a new shadowed y, and we can look for a value that has the same value as the outer y by comparing n to y.
         _ => println!("Default case, x = {:?}", x),
     }
 
