@@ -42,8 +42,19 @@ fn multiple_patterns() {
 fn match_range() {
     let x = 5;
 
-    match x {
+    match x { // Ranges are only allowed with numeric values or char values, because the compiler checks that the range isn’t empty at compile time. The only types for which Rust can tell if a range is empty or not are char and numeric values.
         1 ... 5 => println!("one through five"),
+        _ => println!("something else"),
+    }
+}
+
+fn match_char() {
+
+    let x = 'c';
+
+    match x {
+        'a' ... 'j' => println!("early ASCII letter"),
+        'k' ... 'z' => println!("late ASCII letter"),
         _ => println!("something else"),
     }
 }
