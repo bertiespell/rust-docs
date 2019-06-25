@@ -11,6 +11,7 @@ fn main() {
     prefixed_names_are_different();
     match_guard_example1();
     solve_shadow_var_problem();
+    using_bindings();
 }
 
 fn match_against_literals() {
@@ -330,5 +331,31 @@ fn combine_with_or() {
     match x {
         4 | 5 | 6 if y => println!("yes"), // If 4,5 Or 6 .. AND Y => Implicityl compiler reads like this => (4 | 5 | 6) if y => ...
         _ => println!("no"),
+    }
+}
+
+// @ Bindings
+
+// The at operator (@) lets us create a variable that holds a value at the same time we’re testing that value to see whether it matches a pattern. 
+
+// An example where we want to test that a Message::Hello id field is within the range 3...7. But we also want to bind the value to the variable id_variable so we can use it in the code associated with the arm. We could name this variable id, the same as the field, but for this example we’ll use a different name.
+
+enum Message3 {
+    Hello { id: i32 },
+}
+
+fn using_bindings() {
+    let msg = Message3::Hello { id: 5 };
+
+    match msg {
+        Message3::Hello { id: id_variable @ 3...7 } => { // it prints this - because the bound variable is in range
+            println!("Found an id in range: {}", id_variable) // variable is bound so we can print it here
+        },
+        Message3::Hello { id: 10...12 } => {
+            println!("Found an id in another range")
+        },
+        Message3::Hello { id } => {
+            println!("Found some other id: {}", id)
+        },
     }
 }
