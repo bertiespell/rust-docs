@@ -181,3 +181,10 @@ fn destructuing_references() {
         .map(|&Point { x, y }| x * x + y * y)
         .sum();
 }
+
+// Destructuing structs and Tuples
+// We can mix, match, and nest destructuring patterns in even more complex ways. The following example shows a complicated destructure where we nest structs and tuples inside a tuple and destructure all the primitive values out:
+
+fn destructure_complex() {
+    let ((feet, inches), Point {x, y}) = ((3, 10), Point { x: 3, y: -10 });
+}
