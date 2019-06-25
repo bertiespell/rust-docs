@@ -74,3 +74,11 @@ fn destructuring() {
     assert_eq!(0, a);
     assert_eq!(7, b);
 }
+
+fn shorthand_destructuing_with_matching_var_names() {
+    let p = Point { x: 0, y: 7 };
+
+    let Point { x, y } = p; // shorter - but the same
+    assert_eq!(0, x);
+    assert_eq!(7, y);
+}
