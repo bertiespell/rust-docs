@@ -220,3 +220,13 @@ fn ignore_nested_parts() {
 
     println!("setting is {:?}", setting_value);
 }
+
+fn multiple_placed_underscores() {
+    let numbers = (2, 4, 8, 16, 32);
+
+    match numbers {
+        (first, _, third, _, fifth) => {
+            println!("Some numbers: {}, {}, {}", first, third, fifth)
+        },
+    }
+}
