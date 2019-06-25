@@ -89,7 +89,7 @@ fn use_literal_destructuring() {
 
     match p {
         Point { x, y: 0 } => println!("On the x axis at {}", x),
-        Point { x: 0, y } => println!("On the y axis at {}", y),
+        Point { x: 0, y } => println!("On the y axis at {}", y), // we match this case!
         Point { x, y } => println!("On neither axis: ({}, {})", x, y),
     }
 }
