@@ -328,7 +328,7 @@ fn combine_with_or() {
     let y = false;
 
     match x {
-        4 | 5 | 6 if y => println!("yes"),
+        4 | 5 | 6 if y => println!("yes"), // If 4,5 Or 6 .. AND Y => Implicityl compiler reads like this => (4 | 5 | 6) if y => ...
         _ => println!("no"),
     }
 }
