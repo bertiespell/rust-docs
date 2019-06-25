@@ -10,6 +10,7 @@ fn main() {
     ignore_nested_parts();
     prefixed_names_are_different();
     match_guard_example1();
+    solve_shadow_var_problem();
 }
 
 fn match_against_literals() {
@@ -301,4 +302,19 @@ fn match_guard_example1() {
         Some(x) => println!("{}", x),
         None => (),
     }
+}
+
+// Can also solve problems of shadow variables using match guards!
+
+fn solve_shadow_var_problem() {
+    let x = Some(5);
+    let y = 10;
+
+    match x {
+        Some(50) => println!("Got 50"),
+        Some(n) if n == y => println!("Matched, n = {:?}", n),
+        _ => println!("Default case, x = {:?}", x),
+    }
+
+    println!("at the end: x = {:?}, y = {:?}", x, y);
 }
