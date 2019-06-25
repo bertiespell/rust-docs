@@ -2,6 +2,7 @@ fn main() {
     match_names_variables();
     multiple_patterns();
     match_range();
+    destructuring();
 }
 
 fn match_against_literals() {
@@ -57,4 +58,19 @@ fn match_char() {
         'k' ... 'z' => println!("late ASCII letter"),
         _ => println!("something else"),
     }
+}
+
+// Destructuring
+
+struct Point {
+    x: i32,
+    y: i32,
+}
+
+fn destructuring() {
+    let p = Point { x: 0, y: 7 };
+
+    let Point { x: a, y: b } = p;
+    assert_eq!(0, a);
+    assert_eq!(7, b);
 }
