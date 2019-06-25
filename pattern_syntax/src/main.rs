@@ -242,7 +242,7 @@ fn ignore_unsused_variables() { // sometimes it’s useful to create a variable 
 fn prefixed_names_are_different() {
     let s = Some(String::from("Hello!"));
 
-    if let Some(_s) = s { // The syntax _x still binds the value to the variable, whereas _ doesn’t bind at all. 
+    if let Some(_s) = s { // The syntax _x still binds the value to the variable, whereas _ doesn’t bind at all. ... so Some(_) here would work (without the println being uncommented below)
         println!("found a string");
     }
 
