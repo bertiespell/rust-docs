@@ -8,6 +8,7 @@ fn main() {
     nested_enum_matching();
     ignore_things();
     ignore_nested_parts();
+    prefixed_names_are_different();
 }
 
 fn match_against_literals() {
@@ -234,4 +235,16 @@ fn multiple_placed_underscores() {
 fn ignore_unsused_variables() { // sometimes it’s useful to create a variable you won’t use yet, such as when you’re prototyping or just starting a project. In this situation, you can tell Rust not to warn you about the unused variable by starting the name of the variable with an underscore.
     let _x = 5;
     let y = 10;
+}
+
+// IMPORTANT NOTE => Note that there is a subtle difference between using only _ and using a name that starts with an underscore.
+
+fn prefixed_names_are_different() {
+    let s = Some(String::from("Hello!"));
+
+    if let Some(_s) = s { // The syntax _x still binds the value to the variable, whereas _ doesn’t bind at all. 
+        println!("found a string");
+    }
+
+    // println!("{:?}", s); ERROR => We’ll receive an error because the s value will still be moved into _s, which prevents us from using s again.
 }
