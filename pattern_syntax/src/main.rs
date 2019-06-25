@@ -6,6 +6,7 @@ fn main() {
     use_literal_destructuring();
     destructure_enum();
     nested_enum_matching();
+    ignore_things();
 }
 
 fn match_against_literals() {
@@ -187,4 +188,14 @@ fn destructuing_references() {
 
 fn destructure_complex() {
     let ((feet, inches), Point {x, y}) = ((3, 10), Point { x: 3, y: -10 });
+}
+
+// Ignore values or ranges with _ or ... 
+
+fn foo(_: i32, y: i32) {
+    println!("This code only uses the y parameter: {}", y);
+}
+
+fn ignore_things() {
+    foo(3, 4);
 }
