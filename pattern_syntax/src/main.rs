@@ -251,7 +251,7 @@ fn prefixed_names_are_different() {
 
 // Ignore parts of a value with ..
 
-struct Point {
+struct Point2 {
     x: i32,
     y: i32,
     z: i32,
@@ -259,9 +259,19 @@ struct Point {
 
 fn ignore_parts() {
 
-    let origin = Point { x: 0, y: 0, z: 0 };
+    let origin = Point2 { x: 0, y: 0, z: 0 };
 
     match origin {
-        Point { x, .. } => println!("x is {}", x),
+        Point2 { x, .. } => println!("x is {}", x),
+    }
+}
+
+fn ignore_more_parts() {
+    let numbers = (2, 4, 8, 16, 32);
+
+    match numbers {
+        (first, .., last) => { // matches first and last ... In this code, the first and last value are matched with first and last. The .. will match and ignore everything in the middle.
+            println!("Some numbers: {}, {}", first, last);
+        },
     }
 }
