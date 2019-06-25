@@ -5,4 +5,9 @@ fn main() {
     //If some_option_value was a None value, it would fail to match the pattern Some(x), meaning the pattern is refutable. However, the let statement can only accept an irrefutable pattern because there is nothing valid the code can do with a None value
     // let Some(x) = Some(1); // THIS WILL NOT COMPILE
     // Err: ^^^^^^^ pattern `None` not covered
+
+    // To fix the problem where we have a refutable pattern where an irrefutable pattern is needed, we can change the code that uses the pattern: instead of using let, we can use if let. Then if the pattern doesn’t match, the code will just skip the code in the curly brackets, giving it a way to continue validly.
+    if let Some(x) = some_option_value {
+        println!("{}", x);
+    }
 }
