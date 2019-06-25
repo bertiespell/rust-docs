@@ -9,6 +9,7 @@ fn main() {
     ignore_things();
     ignore_nested_parts();
     prefixed_names_are_different();
+    match_guard_example1();
 }
 
 fn match_against_literals() {
@@ -286,4 +287,18 @@ fn not_happy() {
 //             println!("Some numbers: {}", second)
 //         },
 //     }
-// }
+}
+
+// Extra Conditions with MATCH GUARD
+
+// A match guard is an additional if condition specified after the pattern in a match arm that must also match, along with the pattern matching, for that arm to be chosen. Match guards are useful for expressing more complex ideas than a pattern alone allows.
+
+fn match_guard_example1() {
+    let num = Some(4);
+
+    match num {
+        Some(x) if x < 5 => println!("less than five: {}", x),
+        Some(x) => println!("{}", x),
+        None => (),
+    }
+}
