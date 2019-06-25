@@ -166,3 +166,18 @@ fn nested_enum_matching() {
         _ => ()
     }
 }
+
+// When the value we’re matching to our pattern contains a reference, we need to destructure the reference from the value, which we can do by specifying a & in the pattern. Doing so lets us get a variable holding the value that the reference points to rather than getting a variable that holds the reference. This technique is especially useful in closures where we have iterators that iterate over references, but we want to use the values in the closure rather than the references.
+
+fn destructuing_references() {
+    let points = vec![
+        Point { x: 0, y: 0 },
+        Point { x: 1, y: 5 },
+        Point { x: 10, y: -3 },
+    ];
+
+    let sum_of_squares: i32 = points
+        .iter()
+        .map(|&Point { x, y }| x * x + y * y)
+        .sum();
+}
