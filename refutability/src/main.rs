@@ -10,4 +10,9 @@ fn main() {
     if let Some(x) = Some(5) {
         println!("{}", x);
     }
+
+    // but you can't use an irrefutable pattern with if let
+    // if let x = 5 { // COMPILER ERROR => irrefutable if-let pattern
+    //     println!("{}", x);
+    // };
 }
