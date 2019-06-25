@@ -199,3 +199,5 @@ fn foo(_: i32, y: i32) {
 fn ignore_things() {
     foo(3, 4);
 }
+
+// In most cases when you no longer need a particular function parameter, you would change the signature so it doesn’t include the unused parameter. Ignoring a function parameter can be especially useful in some cases, for example, when implementing a trait when you need a certain type signature but the function body in your implementation doesn’t need one of the parameters. The compiler will then not warn about unused function parameters, as it would if you used a name instead.
