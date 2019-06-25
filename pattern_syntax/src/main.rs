@@ -230,3 +230,8 @@ fn multiple_placed_underscores() {
         },
     }
 }
+
+fn ignore_unsused_variables() { // sometimes it’s useful to create a variable you won’t use yet, such as when you’re prototyping or just starting a project. In this situation, you can tell Rust not to warn you about the unused variable by starting the name of the variable with an underscore.
+    let _x = 5;
+    let y = 10;
+}
