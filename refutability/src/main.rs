@@ -7,7 +7,7 @@ fn main() {
     // Err: ^^^^^^^ pattern `None` not covered
 
     // To fix the problem where we have a refutable pattern where an irrefutable pattern is needed, we can change the code that uses the pattern: instead of using let, we can use if let. Then if the pattern doesn’t match, the code will just skip the code in the curly brackets, giving it a way to continue validly.
-    if let Some(x) = some_option_value {
+    if let Some(x) = Some(5) {
         println!("{}", x);
     }
 }
