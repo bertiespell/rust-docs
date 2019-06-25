@@ -275,3 +275,15 @@ fn ignore_more_parts() {
         },
     }
 }
+
+// NOTE HOWEVER => However, using .. must be unambiguous. If it is unclear which values are intended for matching and which should be ignored, Rust will give us an error. 
+
+fn not_happy() {
+    let numbers = (2, 4, 8, 16, 32);
+
+//     match numbers {
+//         (.., second, ..) => { // this wouldn't compile because it's not clear what it should match on
+//             println!("Some numbers: {}", second)
+//         },
+//     }
+// }
