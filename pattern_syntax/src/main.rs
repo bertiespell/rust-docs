@@ -1,5 +1,6 @@
 fn main() {
     match_names_variables();
+    multiple_patterns();
 }
 
 fn match_against_literals() {
@@ -22,7 +23,17 @@ fn match_names_variables() {
         Some(50) => println!("Got 50"),
         Some(y) => println!("Matched, y = {:?}", y), // The pattern in the second match arm introduces a new variable named y that will match any value inside a Some value. Because we’re in a new scope inside the match expression, this is a new y variable, not the y we declared at the beginning with the value 10. This new y binding will match any value inside a Some, which is what we have in x. Therefore, this new y binds to the inner value of the Some in x. That value is 5, so the expression for that arm executes and prints Matched, y = 5.
         _ => println!("Default case, x = {:?}", x),
-    }
+    } // .... To create a match expression that compares the values of the outer x and y, rather than introducing a shadowed variable, we would need to use a match guard conditional instead
 
     println!("at the end: x = {:?}, y = {:?}", x, y);
+}
+
+fn multiple_patterns() {
+    let x = 2;
+
+    match x {
+        1 | 2 => println!("one or two"), // just use | operator
+        3 => println!("three"),
+        _ => println!("anything"),
+    }
 }
