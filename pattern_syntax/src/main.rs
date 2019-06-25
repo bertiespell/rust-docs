@@ -7,6 +7,7 @@ fn main() {
     destructure_enum();
     nested_enum_matching();
     ignore_things();
+    ignore_nested_parts();
 }
 
 fn match_against_literals() {
@@ -201,3 +202,21 @@ fn ignore_things() {
 }
 
 // In most cases when you no longer need a particular function parameter, you would change the signature so it doesn’t include the unused parameter. Ignoring a function parameter can be especially useful in some cases, for example, when implementing a trait when you need a certain type signature but the function body in your implementation doesn’t need one of the parameters. The compiler will then not warn about unused function parameters, as it would if you used a name instead.
+
+// you can also ignore PARTS of a value using a NESTED _
+
+fn ignore_nested_parts() {
+    let mut setting_value = Some(5);
+    let new_setting_value = Some(10);
+
+    match (setting_value, new_setting_value) {
+        (Some(_), Some(_)) => {
+            println!("Can't overwrite an existing customized value");
+        }
+        _ => {
+            setting_value = new_setting_value;
+        }
+    }
+
+    println!("setting is {:?}", setting_value);
+}
