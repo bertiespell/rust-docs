@@ -1,6 +1,7 @@
 fn main() {
     use_new_add();
     use_default_implementation();
+    fully_qualified_syntax();
 }
 
 /**
@@ -133,4 +134,34 @@ fn use_default_implementation() {
     // To call the fly methods from either the Pilot trait or the Wizard trait, we need to use more explicit syntax to specify which fly method we mean
     Pilot::fly(&person);
     Wizard::fly(&person);
+}
+
+// However, associated functions that are part of traits don’t have a self parameter. When two types in the same scope implement that trait, Rust can’t figure out which type you mean unless you use fully qualified syntax. For example, the Animal trait in Listing 19-27 has the associated function baby_name, the implementation of Animal for the struct Dog, and the associated function baby_name defined on Dog directly.
+
+// A trait with an associated function and a type with an associated function of the same name that also implements the trait:
+trait Animal {
+    fn baby_name() -> String;
+}
+
+struct Dog;
+
+impl Dog {
+    fn baby_name() -> String {
+        String::from("Spot")
+    }
+}
+
+impl Animal for Dog {
+    fn baby_name() -> String {
+        String::from("puppy")
+    }
+}
+
+fn fully_qualified_syntax() {
+    println!("A baby dog is called a {}", Dog::baby_name());
+    // println!("A baby dog is called a {}", Animal::baby_name()); ERROR - this won't compile => type annotations required: cannot resolve `_: Animal`
+    // Because Animal::baby_name is an associated function rather than a method, and thus doesn’t have a self parameter, Rust can’t figure out which implementation of Animal::baby_name we want. 
+
+    // To disambiguate and tell Rust that we want to use the implementation of Animal for Dog, we need to use fully qualified syntax
+    println!("A baby dog is called a {}", <Dog as Animal>::baby_name());
 }
