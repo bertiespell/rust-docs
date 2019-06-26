@@ -19,6 +19,7 @@ To isolate unsafe code as much as possible, it’s best to enclose unsafe code w
 fn main() {
     use_raw_pointer();
     use_split_at_mut();
+    use_c_library();
 }
 
 /**
@@ -111,4 +112,19 @@ fn dont_do_this() {
     let slice = unsafe {
         slice::from_raw_parts_mut(r, 10000)
     };
+}
+
+// Use EXTERN
+// Sometimes, your Rust code might need to interact with code written in another language. For this, Rust has a keyword, extern, that facilitates the creation and use of a Foreign Function Interface (FFI). An FFI is a way for a programming language to define functions and enable a different (foreign) programming language to call those functions.
+
+// Below shows how to set up an integration with the abs function from the C standard library. Functions declared within extern blocks are always unsafe to call from Rust code. The reason is that other languages don’t enforce Rust’s rules and guarantees, and Rust can’t check them, so responsibility falls on the programmer to ensure safety.
+extern "C" {
+    fn abs(input: i32) -> i32;
+}
+
+// Within the extern "C" block, we list the names and signatures of external functions from another language we want to call. The "C" part defines which application binary interface (ABI) the external function uses: the ABI defines how to call the function at the assembly level. The "C" ABI is the most common and follows the C programming language’s ABI.
+fn use_c_library() {
+    unsafe {
+        println!("Absolute value of -3 according to C: {}", abs(-3));
+    }
 }
