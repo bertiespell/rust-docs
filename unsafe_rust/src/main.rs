@@ -55,3 +55,11 @@ fn use_raw_pointer() {
 }
 
 // With all of these dangers, why would you ever use raw pointers? One major use case is when interfacing with C code, as you’ll see in the next section, “Calling an Unsafe Function or Method.” Another case is when building up safe abstractions that the borrow checker doesn’t understand. 
+
+fn call_unsafe_functions() {
+    unsafe {
+        unsafe_function();
+    }
+}
+
+unsafe fn unsafe_function() {}
