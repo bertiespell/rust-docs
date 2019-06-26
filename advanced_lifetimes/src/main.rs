@@ -87,3 +87,21 @@ fn run_inference_of_trait_objects() {
 }
 
 // When we must be explicit, we can add a lifetime bound on a trait object like Box<dyn Red> using the syntax Box<dyn Red + 'static> or Box<dyn Red + 'a>, depending on whether the reference lives for the entire program or not. As with the other bounds, the syntax adding a lifetime bound means that any implementor of the Red trait that has references inside the type must have the same lifetime specified in the trait object bounds as those references.
+
+// 4. ~~~~~~~~~~ The Annoymous Lifetime ~~~~~~~~~~~
+
+// Let's say that we have a struct that's a wrapper around a string slice, like this:
+
+struct StrWrap<'a>(&'a str);
+
+// We can write a function that returns one of these like this:
+
+fn foo<'a>(string: &'a str) -> StrWrap<'a> {
+    StrWrap(string)
+}
+
+// But that's a lot of 'as! To cut down on some of this noise, we can use the anonymous lifetime, '_, like this:
+
+fn foo2(string: &str) -> StrWrap<'_> {
+    StrWrap(string)
+}
