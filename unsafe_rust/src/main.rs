@@ -21,6 +21,7 @@ fn main() {
     use_split_at_mut();
     use_c_library();
     use_static_variable();
+    use_unsafe_static_counter();
 }
 
 /**
@@ -151,8 +152,30 @@ Until now, we’ve not talked about global variables, which Rust does support bu
 In Rust, global variables are called static variables.
  */
 
+// The names of static variables are in SCREAMING_SNAKE_CASE by convention, and we must annotate the variable’s type, which is &'static str in this example. 
 static HELLO_WORLD: &str = "Hello, world!";
 
 fn use_static_variable() {
+    //  Accessing an immutable static variable is safe.
     println!("name is: {}", HELLO_WORLD);
+}
+
+// Constants and immutable static variables might seem similar, but a subtle difference is that values in a static variable have a fixed address in memory. Using the value will always access the same data. Constants, on the other hand, are allowed to duplicate their data whenever they’re used.
+
+// Another difference between constants and static variables is that static variables can be mutable. Accessing and modifying mutable static variables is unsafe.
+
+static mut COUNTER: u32 = 0;
+
+fn add_to_count(inc: u32) {
+    unsafe {
+        COUNTER += inc;
+    }
+}
+
+fn use_unsafe_static_counter() {
+    add_to_count(3);
+
+    unsafe {
+        println!("COUNTER: {}", COUNTER);
+    }
 }
