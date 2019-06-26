@@ -19,9 +19,10 @@ Features of Advanced Lifetimes
 
 // To keep this code simple, we won’t write any parsing logic. However, it’s very likely that somewhere in the parsing logic we would handle invalid input by returning an error that references the part of the input that is invalid; this reference is what makes the code example interesting in regard to lifetimes. Let’s pretend that the logic of our parser is that the input is invalid after the first byte. Note that this code might panic if the first byte is not on a valid character boundary; again, we’re simplifying the example to focus on the lifetimes involved.
 
+// Now we get to the point of this section: the Rust feature lifetime subtyping specifies that one lifetime parameter lives at least as long as another one. In the angle brackets where we declare lifetime parameters, we can declare a lifetime 'a as usual and declare a lifetime 'b that lives at least as long as 'a by declaring 'b using the syntax 'b: 'a.
 struct Context<'s>(&'s str); // This string could have any other lifetime! Not necessarily the same as Parser
 
-struct Parser<'a, 's> {
+struct Parser<'a, 's: 'a> { // the syntax here 's: 'a => this means that 's MUST LIVE at least as long as 'a!!!
     context: &'a Context<'s> // here the lifetime of Context's str is now not the same.. this time we used different parameters depending on whether the reference goes with the string slice or with Context
 }
 
