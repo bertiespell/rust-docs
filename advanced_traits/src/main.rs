@@ -65,3 +65,11 @@ fn use_new_add() {
     assert_eq!(Point { x: 1, y: 0 } + Point { x: 2, y: 3 },
                Point { x: 3, y: 3 });
 }
+
+// The default generic type in this code is within the Add trait. Here is its definition:
+
+trait AddExample<RHS=Self> {
+    type Output;
+
+    fn add(self, rhs: RHS) -> Self::Output;
+}
