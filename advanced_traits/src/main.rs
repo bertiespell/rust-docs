@@ -80,7 +80,7 @@ struct Meters(u32);
 impl Add<Meters> for Millimeters {
     type Output = Millimeters;
 
-    fn add(self, other: Meters) -> Millimeters { // example here we don't just use default
+    fn add(self, other: Meters) -> Millimeters { // example here we don't just use default, we override
         Millimeters(self.0 + (other.0 * 1000))
     }
 }
