@@ -1,5 +1,5 @@
 fn main() {
-    println!("Hello, world!");
+    use_new_add();
 }
 
 /**
@@ -27,4 +27,41 @@ With associated types, we don’t need to annotate types because we can’t impl
 
 pub trait Iterator2<T> {
     fn next(&mut self) -> Option<T>;
+}
+
+// ~~~~~~~~~ Default Generic Type Parameters and Operator Overloading ~~~~~~~~
+
+/**
+
+When we use generic type parameters, we can specify a default concrete type for the generic type. This eliminates the need for implementors of the trait to specify a concrete type if the default type works. The syntax for specifying a default type for a generic type is <PlaceholderType=ConcreteType> when declaring the generic type.
+
+A great example of a situation where this technique is useful is with operator overloading. Operator overloading is customizing the behavior of an operator (such as +) in particular situations.
+
+Rust doesn’t allow you to create your own operators or overload arbitrary operators. But you can overload the operations and corresponding traits listed in std::ops by implementing the traits associated with the operator.
+ */
+
+// Here we overload the + operator to add two Point instances together. We do this by implementing the Add trait on a Point struct:
+
+use std::ops::Add;
+
+#[derive(Debug, PartialEq)]
+struct Point {
+    x: i32,
+    y: i32
+}
+
+impl Add for Point {
+    type Output = Point;
+    
+    fn add(self, other: Point) -> Point {
+        Point {
+            x: self.x + other.x,
+            y: self.y + other.y,
+        }
+    }
+}
+
+fn use_new_add() {
+    assert_eq!(Point { x: 1, y: 0 } + Point { x: 2, y: 3 },
+               Point { x: 3, y: 3 });
 }
