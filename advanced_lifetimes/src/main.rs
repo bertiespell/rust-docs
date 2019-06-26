@@ -69,8 +69,21 @@ struct Ball<'a> {
 
 impl<'a> Red for Ball<'a> { }
 
+/**
+
+This code compiles without any errors, even though we haven’t explicitly annotated the lifetimes involved in obj. This code works because there are rules for working with lifetimes and trait objects:
+
+1. The default lifetime of a trait object is 'static.
+2. With &'a Trait or &'a mut Trait, the default lifetime of the trait object is 'a.
+3. With a single T: 'a clause, the default lifetime of the trait object is 'a.
+4. With multiple clauses like T: 'a, there is no default lifetime; we must be explicit.
+
+ */
+
 fn run_inference_of_trait_objects() {
     let num = 5;
 
     let obj = Box::new(Ball { diameter: &num }) as Box<dyn Red>;
 }
+
+// When we must be explicit, we can add a lifetime bound on a trait object like Box<dyn Red> using the syntax Box<dyn Red + 'static> or Box<dyn Red + 'a>, depending on whether the reference lives for the entire program or not. As with the other bounds, the syntax adding a lifetime bound means that any implementor of the Red trait that has references inside the type must have the same lifetime specified in the trait object bounds as those references.
