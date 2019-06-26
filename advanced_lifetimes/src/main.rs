@@ -20,13 +20,13 @@ Features of Advanced Lifetimes
 
 // To keep this code simple, we won’t write any parsing logic. However, it’s very likely that somewhere in the parsing logic we would handle invalid input by returning an error that references the part of the input that is invalid; this reference is what makes the code example interesting in regard to lifetimes. Let’s pretend that the logic of our parser is that the input is invalid after the first byte. Note that this code might panic if the first byte is not on a valid character boundary; again, we’re simplifying the example to focus on the lifetimes involved.
 
-struct Context(&str);
+struct Context<'a>(&'a str);
 
-struct Parser {
-    context: &Context
+struct Parser<'a> {
+    context: &'a Context<'a>
 }
 
-impl Parser {
+impl <'a> Parser<'a> {
     fn parse(&self) -> Result<(), &str> {
         Err(&self.context.0[1..])
     }
