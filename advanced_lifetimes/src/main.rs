@@ -22,7 +22,7 @@ Features of Advanced Lifetimes
 // Now we get to the point of this section: the Rust feature lifetime subtyping specifies that one lifetime parameter lives at least as long as another one. In the angle brackets where we declare lifetime parameters, we can declare a lifetime 'a as usual and declare a lifetime 'b that lives at least as long as 'a by declaring 'b using the syntax 'b: 'a.
 struct Context<'s>(&'s str); // This string could have any other lifetime! Not necessarily the same as Parser
 
-struct Parser<'a, 's: 'a> { // the syntax here 's: 'a => this means that 's MUST LIVE at least as long as 'a!!!
+struct Parser<'a, 's: 'a> { // the syntax here 's: 'a => this means that 's MUST LIVE at least as long as 'a!!!... Now the reference to Context in the Parser and the reference to the string slice in the Context have different lifetimes; we’ve ensured that the lifetime of the string slice is longer than the reference to the Context.
     context: &'a Context<'s> // here the lifetime of Context's str is now not the same.. this time we used different parameters depending on whether the reference goes with the string slice or with Context
 }
 
