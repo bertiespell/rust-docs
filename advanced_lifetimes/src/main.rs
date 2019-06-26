@@ -1,5 +1,5 @@
 fn main() {
-    println!("Hello, world!");
+    run_inference_of_trait_objects();
 }
 
 /**
@@ -54,4 +54,23 @@ In the “Trait Bounds” section in Chapter 10, we discussed using trait bounds
 struct Ref<'a, T>(&'a T);
 
 // If we need to - we can specifiy lifetime bounds in a similar way to the above (with advanced subtyping for lifetimes)
-struct Ref<'a, T: 'a>(&'a T);
+struct Ref2<'a, T: 'a>(&'a T);
+
+// We could solve this problem in a different way, by adding the 'static lifetime bound on T. This means if T contains any references, they must have the 'static lifetime.
+struct StaticRef<T: 'static>(&'static T);
+
+// 3. ~~~~~~~~~~ Inference of Trait Object Lifetimes ~~~~~~~~~~~
+
+trait Red { }
+
+struct Ball<'a> {
+    diameter: &'a i32,
+}
+
+impl<'a> Red for Ball<'a> { }
+
+fn run_inference_of_trait_objects() {
+    let num = 5;
+
+    let obj = Box::new(Ball { diameter: &num }) as Box<dyn Red>;
+}
