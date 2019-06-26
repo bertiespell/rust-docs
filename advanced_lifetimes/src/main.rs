@@ -2,7 +2,6 @@ fn main() {
     println!("Hello, world!");
 }
 
-
 /**
 Features of Advanced Lifetimes
 
@@ -20,14 +19,23 @@ Features of Advanced Lifetimes
 
 // To keep this code simple, we won’t write any parsing logic. However, it’s very likely that somewhere in the parsing logic we would handle invalid input by returning an error that references the part of the input that is invalid; this reference is what makes the code example interesting in regard to lifetimes. Let’s pretend that the logic of our parser is that the input is invalid after the first byte. Note that this code might panic if the first byte is not on a valid character boundary; again, we’re simplifying the example to focus on the lifetimes involved.
 
-struct Context<'a>(&'a str);
+struct Context<'s>(&'s str); // This string could have any other lifetime! Not necessarily the same as Parser
 
-struct Parser<'a> {
-    context: &'a Context<'a>
+struct Parser<'a, 's> {
+    context: &'a Context<'s> // here the lifetime of Context's str is now not the same.. this time we used different parameters depending on whether the reference goes with the string slice or with Context
 }
 
-impl <'a> Parser<'a> {
-    fn parse(&self) -> Result<(), &str> {
-        Err(&self.context.0[1..])
+impl <'a, 's> Parser<'a, 's> {
+    // Let's take another look at what is happening here...
+    fn parse(&self) -> Result<(), &'s str> { // Remember the elision rules? If we annotate the lifetimes of the references rather than eliding, the signature would be as follows:
+        // fn parse<'a>(&'a self) -> Result<(), &'a str> {
+        Err(&self.context.0[1..]) // The parse_context function can’t see that within the parse function, the string slice returned will outlive Context and Parser and that the reference parse_context returns refers to the string slice, not to Context or Parser.
     }
+}
+
+// We’ll add a function that takes an instance of Context, uses a Parser to parse that context, and returns what parse returns. This code doesn’t quite work.
+fn parse_context(context: Context) -> Result<(), &str> { // Here the str returned needs to live as long as context (which doesn't go out of scope at the end of the function - because it will be in the block that CALLED this function (and passed it as a variable - also this funciton does not consume context (importantly!) - so the reference can live on))
+    Parser { context: &context }.parse() // These errors state that the Parser instance that is created and the context parameter live only until the end of the parse_context function. But they both need to live for the entire lifetime of the function.
+
+    // In other words, Parser and context need to outlive the entire function and be valid before the function starts as well as after it ends for all the references in this code to always be valid. The Parser we’re creating and the context parameter go out of scope at the end of the function, because parse_context takes ownership of context.
 }
