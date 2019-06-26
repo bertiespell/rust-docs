@@ -1,5 +1,6 @@
 fn main() {
     use_new_add();
+    use_default_implementation();
 }
 
 /**
@@ -83,4 +84,53 @@ impl Add<Meters> for Millimeters {
     fn add(self, other: Meters) -> Millimeters { // example here we don't just use default, we override
         Millimeters(self.0 + (other.0 * 1000))
     }
+}
+
+// ~~~~~ Fully Qualified Syntax for Disambiguation: Calling methods with the same name ~~~~~
+
+/**
+
+Nothing in Rust prevents a trait from having a method with the same name as another trait’s method, nor does Rust prevent you from implementing both traits on one type. It’s also possible to implement a method directly on the type with the same name as methods from traits.
+
+When calling methods with the same name, you’ll need to tell Rust which one you want to use. 
+ */
+
+
+trait Pilot {
+    fn fly(&self);
+}
+
+trait Wizard {
+    fn fly(&self);
+}
+
+struct Human;
+
+impl Pilot for Human {
+    fn fly(&self) {
+        println!("This is your captain speaking.");
+    }
+}
+
+impl Wizard for Human {
+    fn fly(&self) {
+        println!("Up!");
+    }
+}
+
+impl Human {
+    fn fly(&self) {
+        println!("*waving arms furiously*");
+    }
+}
+
+// When we call fly on an instance of Human, the compiler defaults to calling the method that is directly implemented on the type,
+
+fn use_default_implementation() {
+    let person = Human;
+    person.fly();
+
+    // To call the fly methods from either the Pilot trait or the Wizard trait, we need to use more explicit syntax to specify which fly method we mean
+    Pilot::fly(&person);
+    Wizard::fly(&person);
 }
