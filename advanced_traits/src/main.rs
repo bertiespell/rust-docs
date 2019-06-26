@@ -73,3 +73,14 @@ trait AddExample<RHS=Self> {
 
     fn add(self, rhs: RHS) -> Self::Output;
 }
+
+struct Millimeters(u32);
+struct Meters(u32);
+
+impl Add<Meters> for Millimeters {
+    type Output = Millimeters;
+
+    fn add(self, other: Meters) -> Millimeters { // example here we don't just use default
+        Millimeters(self.0 + (other.0 * 1000))
+    }
+}
