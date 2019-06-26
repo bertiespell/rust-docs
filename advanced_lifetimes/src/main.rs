@@ -40,3 +40,18 @@ fn parse_context(context: Context) -> Result<(), &str> { // Here the str returne
 
     // In other words, Parser and context need to outlive the entire function and be valid before the function starts as well as after it ends for all the references in this code to always be valid. The Parser we’re creating and the context parameter go out of scope at the end of the function, because parse_context takes ownership of context.
 }
+
+// 2. ~~~~~~~~~~ Lifetime Bounds on References To Generic Types ~~~~~~~~~~~
+
+/**
+
+In the “Trait Bounds” section in Chapter 10, we discussed using trait bounds on generic types. We can also add lifetime parameters as constraints on generic types; these are called lifetime bounds. Lifetime bounds help Rust verify that references in generic types won’t outlive the data they’re referencing.
+
+ */
+
+// Without explicitly constraining the lifetime 'a in relation to the generic parameter T, Rust will error because it doesn’t know how long the generic type T will live:
+// NOTE: As with the example above - I think there must be some changes to the language because this no longer errors in the way the documentation says...
+struct Ref<'a, T>(&'a T);
+
+// If we need to - we can specifiy lifetime bounds in a similar way to the above (with advanced subtyping for lifetimes)
+struct Ref<'a, T: 'a>(&'a T);
