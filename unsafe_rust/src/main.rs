@@ -20,6 +20,7 @@ fn main() {
     use_raw_pointer();
     use_split_at_mut();
     use_c_library();
+    use_static_variable();
 }
 
 /**
@@ -138,4 +139,20 @@ fn use_c_library() {
 #[no_mangle]
 pub extern "C" fn call_from_c() { // This usage of extern does not require unsafe.
     println!("Just called a Rust function from C!");
+}
+
+// NOTE: Here is a good wikipedia article explains what an ABI is => https://stackoverflow.com/questions/2171177/what-is-an-application-binary-interface-abi
+
+// ~~~~~~~~~ Accessing or Modifying a Mutable Static Variable ~~~~~~~~~~~
+
+/**
+Until now, we’ve not talked about global variables, which Rust does support but can be problematic with Rust’s ownership rules. If two threads are accessing the same mutable global variable, it can cause a data race.
+
+In Rust, global variables are called static variables.
+ */
+
+static HELLO_WORLD: &str = "Hello, world!";
+
+fn use_static_variable() {
+    println!("name is: {}", HELLO_WORLD);
 }
