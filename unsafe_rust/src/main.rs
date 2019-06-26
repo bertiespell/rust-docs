@@ -78,3 +78,19 @@ fn use_split_at_mut() {
     assert_eq!(a, &mut [1, 2, 3]);
     assert_eq!(b, &mut [4, 5, 6]);
 }
+
+use std::slice;
+
+fn example_impl_split_at_mut(slice: &mut [i32], mid: usize) -> (&mut [i32], &mut [i32]) {
+    let len = slice.len();
+    assert!(mid <= len);
+    // (&mut slice[0..mid], &mut slice[mid..]) // won't compile because second mutable reference occurs here
+
+    // Rust’s borrow checker can’t understand that we’re borrowing different parts of the slice; it only knows that we’re borrowing from the same slice twice. Borrowing different parts of a slice is fundamentally okay because the two slices aren’t overlapping, but Rust isn’t smart enough to know this. When we know code is okay, but Rust doesn’t, it’s time to reach for unsafe code.
+
+    let ptr = slice.as_mut_ptr();
+    unsafe {
+        (slice::from_raw_parts_mut(ptr, mid),
+        slice::from_raw_parts_mut(ptr.offset(mid as isize), len - mid))
+    }
+}
