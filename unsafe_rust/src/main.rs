@@ -18,6 +18,7 @@ To isolate unsafe code as much as possible, it’s best to enclose unsafe code w
  */
 fn main() {
     use_raw_pointer();
+    use_split_at_mut();
 }
 
 /**
@@ -58,8 +59,22 @@ fn use_raw_pointer() {
 
 fn call_unsafe_functions() {
     unsafe {
-        unsafe_function();
+        unsafe_function(); // Bodies of unsafe functions are effectively unsafe blocks, so to perform other unsafe operations within an unsafe function, we don’t need to add another unsafe block.
     }
 }
 
 unsafe fn unsafe_function() {}
+
+// Creating a safe abstraction around unsafe code
+// Just because a function contains unsafe code doesn’t mean we need to mark the entire function as unsafe. In fact, wrapping unsafe code in a safe function is a common abstraction. As an example, let’s study a function from the standard library, split_at_mut, that requires some unsafe code and explore how we might implement it. This safe method is defined on mutable slices: it takes one slice and makes it two by splitting the slice at the index given as an argument.
+
+fn use_split_at_mut() {
+    let mut v = vec!(1, 2, 3, 4, 5, 6);
+
+    let r = &mut v[..];
+
+    let (a, b) = r.split_at_mut(3);
+
+    assert_eq!(a, &mut [1, 2, 3]);
+    assert_eq!(b, &mut [4, 5, 6]);
+}
