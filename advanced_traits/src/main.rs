@@ -164,4 +164,38 @@ fn fully_qualified_syntax() {
 
     // To disambiguate and tell Rust that we want to use the implementation of Animal for Dog, we need to use fully qualified syntax
     println!("A baby dog is called a {}", <Dog as Animal>::baby_name());
+
+    // <Type as Trait>::function(receiver_if_method, next_arg, ...);
+}
+
+// ~~~~~~~~~~ Super Traits! ~~~~~~~~~
+
+/**
+
+Sometimes, you might need one trait to use another trait’s functionality. In this case, you need to rely on the dependent trait’s also being implemented. The trait you rely on is a supertrait of the trait you’re implementing.
+
+For example, let’s say we want to make an OutlinePrint trait with an outline_print method that will print a value framed in asterisks. That is, given a Point struct that implements Display to result in (x, y), when we call outline_print on a Point instance that has 1 for x and 3 for y, it should print the following:
+
+**********
+*        *
+* (1, 3) *
+*        *
+**********
+
+In the implementation of outline_print, we want to use the Display trait’s functionality. Therefore, we need to specify that the OutlinePrint trait will work only for types that also implement Display and provide the functionality that OutlinePrint needs. We can do that in the trait definition by specifying OutlinePrint: Display. This technique is similar to adding a trait bound to the trait. 
+
+ */
+
+use std::fmt;
+
+trait OutlinePrint: fmt::Display {
+    fn outline_print(&self) {
+        let output = self.to_string();
+        let len = output.len();
+        println!("{}", "*".repeat(len + 4));
+        println!("*{}*", " ".repeat(len + 2));
+        println!("* {} *", output);
+        println!("*{}*", " ".repeat(len + 2));
+        println!("{}", "*".repeat(len + 4));
+    }
 }
