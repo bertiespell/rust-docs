@@ -105,3 +105,11 @@ fn foo<'a>(string: &'a str) -> StrWrap<'a> {
 fn foo2(string: &str) -> StrWrap<'_> {
     StrWrap(string)
 }
+
+// It works in impl headers too; for example:
+
+// verbose
+// impl<'a> fmt::Debug for StrWrap<'a> {
+
+// elided
+// impl fmt::Debug for StrWrap<'_> {
