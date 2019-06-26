@@ -39,6 +39,12 @@ fn use_raw_pointer() {
     let mut num = 5;
     let r1 = &num as *const i32; // note the * const
     let r2 = &mut num as *mut i32; // note the *mut
+    // If we instead tried to create an immutable and a mutable reference to num, the code would not have compiled because Rust’s ownership rules don’t allow a mutable reference at the same time as any immutable references. With raw pointers, we can create a mutable pointer and an immutable pointer to the same location and change data through the mutable pointer, potentially creating a data race
+
+    unsafe { // dereferencing must be in an unsafe block
+        println!("r1 is: {}", *r1);
+        println!("r2 is: {}", *r2);
+    }
 
     // We’ve created raw pointers by using as to cast an immutable and a mutable reference into their corresponding raw pointer types. Because we created them directly from references guaranteed to be valid, we know these particular raw pointers are valid, but we can’t make that assumption about just any raw pointer.
 
@@ -47,3 +53,5 @@ fn use_raw_pointer() {
     let address = 0x012345usize;
     let r = address as *const i32;
 }
+
+// With all of these dangers, why would you ever use raw pointers? One major use case is when interfacing with C code, as you’ll see in the next section, “Calling an Unsafe Function or Method.” Another case is when building up safe abstractions that the borrow checker doesn’t understand. 
