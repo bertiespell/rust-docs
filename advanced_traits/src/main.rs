@@ -199,3 +199,16 @@ trait OutlinePrint: fmt::Display {
         println!("{}", "*".repeat(len + 4));
     }
 }
+
+struct Point {
+    x: i32,
+    y: i32,
+}
+
+impl OutlinePrint for Point {} // Without the code below we'd get an error (that trait bounds arent satisfied - i.e. we need to implement Display
+
+impl fmt::Display for Point {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "({}, {})", self.x, self.y)
+    }
+})
